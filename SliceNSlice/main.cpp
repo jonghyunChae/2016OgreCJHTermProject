@@ -1,5 +1,26 @@
 #include "ObjectList.h"
 
+class UpdateListener : public FrameListener
+{
+	CPlayer * mPlayer;
+
+public:
+	UpdateListener(CPlayer * pPlayer) : mPlayer(pPlayer)
+	{
+	}
+
+	virtual ~UpdateListener()
+	{
+		delete mPlayer;
+	}
+
+	bool frameStarted(const FrameEvent &evt)
+	{
+		mPlayer->update(evt.timeSinceLastFrame);
+		return true;
+	}
+};
+
 class InputController : public FrameListener, 
   public OIS::KeyListener, 
   public OIS::MouseListener
@@ -23,18 +44,22 @@ public:
     mKeyboard->capture();
     mMouse->capture();
 
+	if (mKeyboard->isKeyDown(OIS::KC_LEFT)) mProfessorNode->translate(-1, 0, 0);
+	if (mKeyboard->isKeyDown(OIS::KC_RIGHT)) mProfessorNode->translate(1, 0, 0);
+	if (mKeyboard->isKeyDown(OIS::KC_UP)) mProfessorNode->translate(0, 0, -1);
+	if (mKeyboard->isKeyDown(OIS::KC_DOWN)) mProfessorNode->translate(0, 0, 1);
+
+	if (mKeyboard->isKeyDown(OIS::KC_A)) mProfessorNode->yaw(Degree(-1));
+	if (mKeyboard->isKeyDown(OIS::KC_D)) mProfessorNode->yaw(Degree(1));
+
+
 	return !mKeyboard->isKeyDown(OIS::KC_ESCAPE);
   }
 
   // Key Linstener Interface Implementation
-
   bool keyPressed( const OIS::KeyEvent &evt )
   {
-    // Fill Here -----------------------------------------------
-
-    // ---------------------------------------------------------
 	  return true;
-
   }
 
   bool keyReleased( const OIS::KeyEvent &evt )
@@ -47,7 +72,6 @@ public:
 
   bool mouseMoved( const OIS::MouseEvent &evt )
   {
-
     if (evt.state.buttonDown(OIS::MB_Right)) 
     {
       mCamera->yaw(Degree(-evt.state.X.rel));
@@ -69,35 +93,31 @@ public:
     return true;
   }
 
-
 private:
-  bool mContinue;
-  Ogre::Root* mRoot;
+  bool			 mContinue;
+  Ogre::Root*	 mRoot;
   OIS::Keyboard* mKeyboard;
-  OIS::Mouse* mMouse;
-  Camera* mCamera;
-  SceneNode* mProfessorNode;
+  OIS::Mouse*	 mMouse;
+  Camera*		 mCamera;
+  SceneNode*	 mProfessorNode;
 };
 
 
 class LectureApp {
 
-  Root* mRoot;
-  RenderWindow* mWindow;
-  SceneManager* mSceneMgr;
-  Camera* mCamera;
-  Viewport* mViewport;
+  Root*          mRoot;
+  RenderWindow*  mWindow;
+  SceneManager*  mSceneMgr;
+  Camera*		 mCamera;
+  Viewport*      mViewport;
   OIS::Keyboard* mKeyboard;
-  OIS::Mouse* mMouse;
+  OIS::Mouse*    mMouse;
 
   OIS::InputManager *mInputManager;
-
-
 
 public:
 
   LectureApp() {}
-
   ~LectureApp() {}
 
   void go(void)
@@ -118,15 +138,6 @@ public:
     mWindow = mRoot->initialise(true, CLIENT_DESCRIPTION);
 
     mSceneMgr = mRoot->createSceneManager(ST_GENERIC, "main");
-    mCamera = mSceneMgr->createCamera("main");
-
-
-    mCamera->setPosition(0.0f, 200.0f, 500.0f);
-    mCamera->lookAt(0.0f, 50.0f, 0.0f);
-
-    mViewport = mWindow->addViewport(mCamera);
-    mViewport->setBackgroundColour(ColourValue(0.0f,0.0f,0.5f));
-    mCamera->setAspectRatio(Real(mViewport->getActualWidth()) / Real(mViewport->getActualHeight()));
 
     ResourceGroupManager::getSingleton().addResourceLocation("resource.zip", "Zip");
     ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
@@ -140,11 +151,16 @@ public:
 
     _drawGridPlane();
 
+	CPlayer * pPlayer = new CPlayer();
+	pPlayer->buildObject(mRoot, mSceneMgr);
 
-    Entity* entity1 = mSceneMgr->createEntity("Professor", "DustinBody.mesh");
-    SceneNode* node1 = mSceneMgr->getRootSceneNode()->createChildSceneNode("Professor", Vector3(0.0f, 0.0f, 0.0f));
-    node1->attachObject(entity1);
+	mCamera = pPlayer->getCamera(); 
+	mViewport = mWindow->addViewport(mCamera);
+	mViewport->setBackgroundColour(ColourValue(0.0f, 0.0f, 0.5f));
+	mCamera->setAspectRatio(Real(mViewport->getActualWidth()) / Real(mViewport->getActualHeight()));
 
+	UpdateListener* frameUpdate = new UpdateListener(pPlayer);
+	mRoot->addFrameListener(frameUpdate);
 
     size_t windowHnd = 0;
     std::ostringstream windowHndStr;
@@ -157,7 +173,6 @@ public:
     pl.insert(std::make_pair(std::string("w32_keyboard"), std::string("DISCL_FOREGROUND")));
     pl.insert(std::make_pair(std::string("w32_keyboard"), std::string("DISCL_NONEXCLUSIVE")));
     mInputManager = OIS::InputManager::createInputSystem(pl);
-
 
     mKeyboard = static_cast<OIS::Keyboard*>(mInputManager->createInputObject(OIS::OISKeyboard, true));
     mMouse = static_cast<OIS::Mouse*>( mInputManager->createInputObject(OIS::OISMouse, true));
@@ -172,6 +187,7 @@ public:
     OIS::InputManager::destroyInputSystem(mInputManager);
 
     delete inputController;
+	delete frameUpdate;
 
     delete mRoot;
   }
@@ -190,13 +206,13 @@ private:
     gridPlaneMaterial->getTechnique(0)->getPass(0)->setSelfIllumination(1,1,1); 
 
     gridPlane->begin("GridPlaneMaterial", Ogre::RenderOperation::OT_LINE_LIST); 
-    for(int i=0; i<21; i++)
+    for(int i=0; i<41; i++)
     {
-      gridPlane->position(-500.0f, 0.0f, 500.0f-i*50);
-      gridPlane->position(500.0f, 0.0f, 500.0f-i*50);
+      gridPlane->position(-2000.0f, 0.0f, 2000.0f-i*100);
+      gridPlane->position(2000.0f, 0.0f, 2000.0f-i*100);
 
-      gridPlane->position(-500.f+i*50, 0.f, 500.0f);
-      gridPlane->position(-500.f+i*50, 0.f, -500.f);
+      gridPlane->position(-2000.f+i*100, 0.f, 2000.0f);
+      gridPlane->position(-2000.f+i*100, 0.f, -2000.f);
     }
 
     gridPlane->end(); 

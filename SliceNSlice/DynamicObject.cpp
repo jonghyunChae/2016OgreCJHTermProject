@@ -14,6 +14,10 @@ CDynamicObject::~CDynamicObject()
 {
 }
 
+void CDynamicObject::buildObject(Root * pRoot, SceneManager * pSceneMgr)
+{
+}
+
 void CDynamicObject::update(float fFrameTime)
 {
 	if (mpChildObject) mpChildObject->update(fFrameTime);

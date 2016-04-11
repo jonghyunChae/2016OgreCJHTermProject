@@ -11,6 +11,7 @@ public:
 	CGameObject();
 	virtual ~CGameObject();
 
+	virtual void buildObject(Root* pRoot, SceneManager* pSceneMgr) = 0;
 	virtual void update(float fFrameTime) = 0;
 
 public:
@@ -24,6 +25,7 @@ public:
 
 protected:
 	SceneNode * mpNode;
+	SceneNode * mpCameraNode;
 
 	CGameObject * mpChildObject;
 

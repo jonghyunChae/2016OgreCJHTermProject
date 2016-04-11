@@ -11,6 +11,7 @@ public:
 	CStaticObject();
 	virtual ~CStaticObject();
 
+	virtual void buildObject(Root* pRoot, SceneManager* pSceneMgr);
 	virtual void update(float fFrameTime);
 };
 
