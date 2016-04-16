@@ -139,10 +139,11 @@ public:
 
     mSceneMgr = mRoot->createSceneManager(ST_GENERIC, "main");
 
-    ResourceGroupManager::getSingleton().addResourceLocation("resource.zip", "Zip");
+    //ResourceGroupManager::getSingleton().addResourceLocation("resource.zip", "Zip");
+	ResourceGroupManager::getSingleton().addResourceLocation("resource2.zip", "Zip");
     ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
 
-    mSceneMgr->setAmbientLight(ColourValue(1.0f, 1.0f, 1.0f));
+    mSceneMgr->setAmbientLight(ColourValue(10.0f, 10.0f, 10.0f));
 
     // ÁÂÇ¥Ãà Ç¥½Ã
     Ogre::Entity* mAxesEntity = mSceneMgr->createEntity("Axes", "axes.mesh");
@@ -156,7 +157,7 @@ public:
 
 	mCamera = pPlayer->getCamera(); 
 	mViewport = mWindow->addViewport(mCamera);
-	mViewport->setBackgroundColour(ColourValue(0.0f, 0.0f, 0.5f));
+	mViewport->setBackgroundColour(ColourValue(0.5f, 0.5f, 0.5f));
 	mCamera->setAspectRatio(Real(mViewport->getActualWidth()) / Real(mViewport->getActualHeight()));
 
 	UpdateListener* frameUpdate = new UpdateListener(pPlayer);

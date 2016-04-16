@@ -1,0 +1,23 @@
+material Paladin_MAT
+{
+	technique
+	{
+		pass
+		{
+			ambient 1.0 1.0 1.0 1
+			specular 1.0 1.0 1.0 1 43.2193
+			emissive 0.988235 0.988235 0.988235 1
+
+			texture_unit
+			{
+				texture Paladin_diffuse.png
+			}
+
+			texture_unit
+			{
+			}
+		}
+
+	}
+
+}

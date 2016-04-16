@@ -1,0 +1,95 @@
+10:49:34: == Exporting Objects ==
+
+10:49:34: Exporting Object: DustinBody
+
+10:49:34: Compiled 30 physiquebones to model
+
+10:49:34: Object has 1 texture sets
+
+10:49:34: Compiling material Material_#153/DustinBodySkin
+
+10:49:34: New texture unit dustinbody.png
+
+10:49:34: Object has 1 texture sets
+
+10:49:34: Compiling material Material_#153/DustinBodyWear
+
+10:49:34: New texture unit dustinbody.png
+
+10:49:34: Object has 1 texture sets
+
+10:49:34: Compiling material Material_#153/DustinFace
+
+10:49:34: New texture unit DustinFace.png
+
+10:49:34: Object has 1 texture sets
+
+10:49:34: Compiling material Material_#153/DustinEye
+
+10:49:34: New texture unit dustinface.png
+
+10:49:34: Object has 1 texture sets
+
+10:49:34: Compiling material Material_#153/DustinTeeth
+
+10:49:34: New texture unit dustinface.png
+
+10:49:36:  Skeleton: DustinBody_mesh_skel.... exported 
+
+10:49:36:  == Animations == (19)
+
+10:49:36:   BackStep
+
+10:49:36:   BackWalk
+
+10:49:36:   Climb
+
+10:49:36:   Grip
+
+10:49:36:   Holding
+
+10:49:36:   Idle
+
+10:49:36:   JumpEnd
+
+10:49:36:   JumpUp
+
+10:49:36:   Jumping
+
+10:49:36:   LeftAttack
+
+10:49:36:   LeftSideStep
+
+10:49:36:   Lift
+
+10:49:36:   Pull
+
+10:49:36:   Push
+
+10:49:36:   RightAttack
+
+10:49:36:   RightSideStep
+
+10:49:36:   Run
+
+10:49:36:   Throw
+
+10:49:36:   Walk
+
+10:49:36:  Mesh: DustinBody_mesh.... done 
+
+10:49:36: 
+== Exporting Materials ==
+
+10:49:36:  Material_#153/DustinBodySkin
+
+10:49:36:  Material_#153/DustinBodyWear
+
+10:49:36:  Material_#153/DustinFace
+
+10:49:36:  Material_#153/DustinEye
+
+10:49:36:  Material_#153/DustinTeeth
+
+10:49:36: 5 material(s) exported to Dustin.material
+

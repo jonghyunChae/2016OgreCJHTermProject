@@ -41,7 +41,46 @@ public:
   bool keyPressed( const OIS::KeyEvent &evt )
   {
     // Fill Here -----------------------------------------------
-
+	  switch (evt.key)
+	  {
+	  case OIS::KC_1:
+	  {
+		  mProfessorNode->setOrientation(Ogre::Quaternion::IDENTITY);
+		  Quaternion z(Degree(90), Vector3::UNIT_Z);
+		  mProfessorNode->rotate(z);
+	  }
+	  break;
+	  case OIS::KC_2:
+	  {
+		  mProfessorNode->setOrientation(Ogre::Quaternion::IDENTITY);
+		  Quaternion z(Degree(90), Vector3::UNIT_Z);
+		  Quaternion x(Degree(90), Vector3::UNIT_X);
+		  Quaternion p = x * z;
+		  mProfessorNode->rotate(p);
+	  }
+	  break;
+	  case OIS::KC_3:
+	  {
+		  mProfessorNode->setOrientation(Ogre::Quaternion::IDENTITY);
+		  Quaternion z(Degree(90), Vector3::UNIT_Z);
+		  Quaternion x(Degree(90), Vector3::UNIT_X);
+		  Quaternion p = z * x;
+		  mProfessorNode->rotate(p);
+	  }
+	  break;
+	  case OIS::KC_4:
+	  {
+		  mProfessorNode->setOrientation(Ogre::Quaternion::IDENTITY);
+		  Quaternion q(Degree(180), Vector3(1, 1, 0));
+		  mProfessorNode->rotate(q);
+	  }
+	  break;
+	  case OIS::KC_R:
+		  mProfessorNode->setOrientation(Ogre::Quaternion::IDENTITY);
+		  break;
+	  case OIS::KC_ESCAPE: mContinue = false; break;
+	  }
+	  return true;
     // ---------------------------------------------------------
 
   }
