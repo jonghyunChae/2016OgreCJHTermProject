@@ -11,7 +11,7 @@ public:
 	CDynamicObject();
 	virtual ~CDynamicObject();
 
-	virtual void buildObject(Root* pRoot, SceneManager* pSceneMgr);
+	virtual void buildObject(Root* pRoot, SceneManager* pSceneMgr, const char * objName);
 	virtual void update(float fFrameTime);
 
 public:
@@ -21,11 +21,29 @@ public:
 	float getMaxSpeed() { return mMaxSpeed; }
 	void setMaxSpeed(float fSpeed) { mMaxSpeed = fSpeed; }
 
+public:
+	bool changeState(const Vector3 & before, const Vector3 & afterVelocity);
+	bool isMovingToPoint() { return mTargetDistance > 0.f; }
+	
+	void moveToPoint(const Vector3 & pos);
+	void move(const Vector3 & addVelocity);
+	enum OBJ_STATE { eNONE = -1, eIDLE, eWALKING, eROTATING };
+
 protected:
 	Vector3  mDir;
 	float    mMaxSpeed;
 
 	Vector3  mVelocity;
+
+	OBJ_STATE mState;
+
+private:
+	Quaternion mSrcQuat, mDestQuat;
+	float mRotatingTime;
+
+	Vector3 mTargetPos;
+	float mTargetDistance;
+
 };
 
 #endif

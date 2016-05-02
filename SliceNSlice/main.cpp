@@ -27,10 +27,12 @@ class InputController : public FrameListener,
 {
 
 public:
-  InputController(Root* root, OIS::Keyboard *keyboard, OIS::Mouse *mouse) : mRoot(root), mKeyboard(keyboard), mMouse(mouse)
+  InputController(Root* root, OIS::Keyboard *keyboard, OIS::Mouse *mouse, CPlayer * pPlayer) : mRoot(root), mKeyboard(keyboard), mMouse(mouse)
   {
-    mProfessorNode = mRoot->getSceneManager("main")->getSceneNode("Professor");
-    mCamera = mRoot->getSceneManager("main")->getCamera("main");
+    //mProfessorNode = mRoot->getSceneManager("main")->getSceneNode("Professor");
+	  mpPlayer = pPlayer;
+	  mpPlayer->setAnimation("Idle");
+	  mCamera = pPlayer->getCamera();
 
     mContinue = true;
 
@@ -44,29 +46,35 @@ public:
     mKeyboard->capture();
     mMouse->capture();
 
-	if (mKeyboard->isKeyDown(OIS::KC_LEFT)) mProfessorNode->translate(-1, 0, 0);
-	if (mKeyboard->isKeyDown(OIS::KC_RIGHT)) mProfessorNode->translate(1, 0, 0);
-	if (mKeyboard->isKeyDown(OIS::KC_UP)) mProfessorNode->translate(0, 0, -1);
-	if (mKeyboard->isKeyDown(OIS::KC_DOWN)) mProfessorNode->translate(0, 0, 1);
-
-	if (mKeyboard->isKeyDown(OIS::KC_A)) mProfessorNode->yaw(Degree(-1));
-	if (mKeyboard->isKeyDown(OIS::KC_D)) mProfessorNode->yaw(Degree(1));
-
-
+	//if (mKeyboard->isKeyDown(OIS::KC_A)) mProfessorNode->yaw(Degree(-1));
+	//if (mKeyboard->isKeyDown(OIS::KC_D)) mProfessorNode->yaw(Degree(1));
 	return !mKeyboard->isKeyDown(OIS::KC_ESCAPE);
   }
 
   // Key Linstener Interface Implementation
   bool keyPressed( const OIS::KeyEvent &evt )
   {
+	  switch (evt.key)
+	  {
+	  case OIS::KC_LEFT:  mpPlayer->move(-Vector3::UNIT_X); break;
+	  case OIS::KC_RIGHT: mpPlayer->move(Vector3::UNIT_X);  break;
+	  case OIS::KC_UP:    mpPlayer->move(-Vector3::UNIT_Z); break;
+	  case OIS::KC_DOWN:  mpPlayer->move(Vector3::UNIT_Z);  break;
+	  }
 	  return true;
   }
 
   bool keyReleased( const OIS::KeyEvent &evt )
   {
+	  switch (evt.key)
+	  {
+	  case OIS::KC_LEFT:  mpPlayer->move(Vector3::UNIT_X); break;
+	  case OIS::KC_RIGHT: mpPlayer->move(-Vector3::UNIT_X);  break;
+	  case OIS::KC_UP:    mpPlayer->move(Vector3::UNIT_Z); break;
+	  case OIS::KC_DOWN:  mpPlayer->move(-Vector3::UNIT_Z);  break;
+	  }
 	  return true;
   }
-
 
   // Mouse Listener Interface Implementation
 
@@ -99,7 +107,7 @@ private:
   OIS::Keyboard* mKeyboard;
   OIS::Mouse*	 mMouse;
   Camera*		 mCamera;
-  SceneNode*	 mProfessorNode;
+  CPlayer*		 mpPlayer;
 };
 
 
@@ -152,8 +160,9 @@ public:
 
     _drawGridPlane();
 
-	CPlayer * pPlayer = new CPlayer();
-	pPlayer->buildObject(mRoot, mSceneMgr);
+	CWarriorPlayer * pPlayer = new CWarriorPlayer();
+	pPlayer->buildObject(mRoot, mSceneMgr, "Professor");
+	pPlayer->setAnimation("Idle");
 
 	mCamera = pPlayer->getCamera(); 
 	mViewport = mWindow->addViewport(mCamera);
@@ -178,7 +187,7 @@ public:
     mKeyboard = static_cast<OIS::Keyboard*>(mInputManager->createInputObject(OIS::OISKeyboard, true));
     mMouse = static_cast<OIS::Mouse*>( mInputManager->createInputObject(OIS::OISMouse, true));
 
-    InputController* inputController = new InputController(mRoot, mKeyboard, mMouse);
+    InputController* inputController = new InputController(mRoot, mKeyboard, mMouse, pPlayer);
     mRoot->addFrameListener(inputController);
 
     mRoot->startRendering();

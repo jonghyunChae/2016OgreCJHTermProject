@@ -11,7 +11,7 @@ public:
 	CPlayer();
 	virtual ~CPlayer();
 
-	virtual void buildObject(Root* pRoot, SceneManager* pSceneMgr);
+	virtual void buildObject(Root* pRoot, SceneManager* pSceneMgr, const char * objName);
 	virtual void update(float fFrameTime);
 
 public:
@@ -23,6 +23,7 @@ private:
 
 private:
 	Camera * mCamera;
+	SceneNode * mpCameraNode;
 
 };
 

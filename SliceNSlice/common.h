@@ -9,6 +9,8 @@
 
 #include <Ogre.h>
 #include <OIS/OIS.h>
-
+#include <iostream>
+#include <map>
 
 using namespace Ogre;
+using namespace std;

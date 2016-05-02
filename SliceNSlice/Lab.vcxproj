@@ -203,6 +203,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="StaticObject.cpp" />
+    <ClCompile Include="WarriorPlayer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="resource.zip">
@@ -242,6 +243,7 @@
     <ClInclude Include="ObjectList.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="StaticObject.h" />
+    <ClInclude Include="WarriorPlayer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
