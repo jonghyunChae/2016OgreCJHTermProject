@@ -4,6 +4,11 @@ CPlayer::CPlayer() : CCharacter()
 {
 	mCamera = nullptr;
 	mpCameraNode = nullptr;
+
+	mCameraDragSpeed = 0.f;
+	mOffsetMaxLength = 0.f;
+
+	mOffsetCamera = Vector3::ZERO;
 }
 
 CPlayer::~CPlayer()
@@ -12,54 +17,76 @@ CPlayer::~CPlayer()
 
 void CPlayer::buildObject(Root* pRoot, SceneManager* pSceneMgr, const char * objName)
 {
-	_buildCamera(pRoot, pSceneMgr);
 
 	mCharacterRoot = pSceneMgr->getRootSceneNode()->createChildSceneNode("ProfessorRoot");
 	mCharacterYaw = mCharacterRoot->createChildSceneNode("ProfessorYaw");
 
-	mCameraYaw = mCharacterRoot->createChildSceneNode("CameraYaw", Vector3(0.0f, 120.0f, 0.0f));
-	mCameraPitch = mCameraYaw->createChildSceneNode("CameraPitch");
-	mCameraHolder = mCameraPitch->createChildSceneNode("CameraHolder", Vector3(0.0f, 80.0f, 500.0f));
+	Entity* characterEntity = pSceneMgr->createEntity(objName, "DustinBody.mesh"); //"paladin.MESH.mesh");
+	mCharacterYaw->attachObject(characterEntity);
+	characterEntity->setCastShadows(true);
 
-	Entity* mCharacterEntity = pSceneMgr->createEntity(objName, "DustinBody.mesh"); //"paladin.MESH.mesh");
-	SceneNode* playerNode = pSceneMgr->getRootSceneNode()->createChildSceneNode(objName, Vector3::ZERO);
-	//playerNode->attachObject(mCharacterEntity);
+	_buildCamera(pRoot, pSceneMgr);
 
-	//mCharacterEntity = pSceneMgr->createEntity("Professor", "DustinBody.mesh");
-	mCharacterYaw->attachObject(mCharacterEntity);
-	//mCharacterEntity->setCastShadows(true);
-
-	mCameraHolder->attachObject(mCamera);
-	mCamera->lookAt(mCameraYaw->getPosition());
-
-	setNode(mCharacterRoot);
-
-	CCharacter::buildObject(pRoot, pSceneMgr, objName);
-//	Entity* entity2 = pSceneMgr->createEntity("Camera", "DustinBody.mesh");
-	//mpCameraNode          = mCharacterYaw
-	mCameraHolder->setInheritOrientation(true);
-//	mpCameraNode->attachObject(entity2);
-
+	mpNode = mCharacterRoot;
+	mpEntity = characterEntity;
 }
 
 void CPlayer::update(float frameTime)
 {
 	CCharacter::update(frameTime);
 
-	const Vector3& vecPos = mpNode->getPosition();
-	const Vector3& vecCamera = mCameraHolder->getPosition();
+	if (mCameraDragSpeed == 0.f) return;
 
-	mCamera->setPosition(vecPos + vecCamera);
-	mCamera->lookAt(vecPos - vecCamera);
+	if (mState == eWALKING)
+	{
+		if (mOffsetCamera.length() < mMaxSpeed)
+		{
+			const Vector3 direction = mVelocity.normalisedCopy();
+			const Vector3 cameraMovVector = -direction * mCameraDragSpeed * frameTime;
+			mCameraHolder->translate(cameraMovVector);
+			mOffsetCamera += cameraMovVector;
+		}
+	}
+	else
+	{
+		float fCameraOffsetLength = mOffsetCamera.length();
+		if (fCameraOffsetLength > 0)
+		{
+			const static float minLength = 5.f;
+			if (fCameraOffsetLength < minLength)
+			{
+				mCameraHolder->translate(-mOffsetCamera);
+				mOffsetCamera = Vector3::ZERO;
+			}
+			else
+			{
+				const Vector3 cameraMovVector = -mOffsetCamera.normalisedCopy() * mCameraDragSpeed * frameTime;
+				mCameraHolder->translate(cameraMovVector);
+				mOffsetCamera += cameraMovVector;
+			}
+		}
+	}
+}
+
+bool CPlayer::mouseMoved(const OIS::MouseEvent & evt)
+{
+	mCameraYaw->yaw(Degree(-evt.state.X.rel));
+	mCameraPitch->pitch(Degree(-evt.state.Y.rel));
+
+	mCameraHolder->translate(Ogre::Vector3(0, 0, -evt.state.Z.rel * 0.1f));
+	return true;
 }
 
 void CPlayer::_buildCamera(Root * pRoot, SceneManager * pSceneMgr)
 {
 	mCamera = pSceneMgr->getCamera("main");
-
-	//mCamera->setPosition(0.0f, 150.0f, 500.0f);
-	//mCamera->lookAt(0.0f, 50.0f, 0.0f);
-
 	setCamera(mCamera);
 
+	mCameraYaw = mCharacterRoot->createChildSceneNode("CameraYaw", Vector3(0.0f, 120.0f, 0.0f));
+	mCameraPitch = mCameraYaw->createChildSceneNode("CameraPitch");
+	mCameraHolder = mCameraPitch->createChildSceneNode("CameraHolder", Vector3(0.0f, 80.0f, 500.0f));
+
+	mCameraHolder->attachObject(mCamera);
+	mCamera->lookAt(mCameraYaw->getPosition());
+	mCameraYaw->setInheritOrientation(false);
 }

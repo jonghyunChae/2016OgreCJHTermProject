@@ -64,13 +64,7 @@ bool InGameState::frameEnded(GameManager * game, const Ogre::FrameEvent & evt)
 
 bool InGameState::mouseMoved(GameManager * game, const OIS::MouseEvent & e)
 {
-	if (e.state.buttonDown(OIS::MB_Right))
-	{
-		mCamera->yaw(Degree(-e.state.X.rel));
-		mCamera->pitch(Degree(-e.state.Y.rel));
-	}
-
-	mCamera->moveRelative(Ogre::Vector3(0, 0, -e.state.Z.rel * 0.1f));
+	mpPlayer->mouseMoved(e);
 	return true;
 }
 

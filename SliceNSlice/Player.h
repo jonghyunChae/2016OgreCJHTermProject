@@ -18,10 +18,17 @@ public:
 	void setCamera(Camera * pCamera) { mCamera = pCamera; }
 	Camera* getCamera() { return mCamera; }
 
+	bool mouseMoved(const OIS::MouseEvent &evt);
+
+protected :
+	void setCameraDragSpeed(float speed) { mCameraDragSpeed = speed; }
+	void setCameraOffsetMaxLength(float length) { mOffsetMaxLength = length; }
+
 private:
 	void _buildCamera(Root* pRoot, SceneManager * pSceneMgr);
 
 private:
+	Vector3 mOffsetCamera;
 	Camera * mCamera;
 	SceneNode * mpCameraNode;
 
@@ -31,6 +38,9 @@ private:
 	Ogre::SceneNode* mCameraYaw;
 	Ogre::SceneNode* mCameraPitch;
 
+private:
+	float mCameraDragSpeed;
+	float mOffsetMaxLength;
 };
 
 #endif

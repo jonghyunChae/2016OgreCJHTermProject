@@ -13,6 +13,7 @@ void CWarriorPlayer::buildObject(Root* pRoot, SceneManager* pSceneMgr, const cha
 	CPlayer::buildObject(pRoot, pSceneMgr, objName);
 
 	setMaxSpeed(100.f);
+	setCameraDragSpeed(50.f);
 
 	insertAnimationState(eIDLE, string("Idle"));
 	insertAnimationState(eWALKING, string("Walk"));
