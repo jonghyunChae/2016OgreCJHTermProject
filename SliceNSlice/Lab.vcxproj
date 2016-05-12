@@ -199,7 +199,9 @@
   <ItemGroup>
     <ClCompile Include="Character.cpp" />
     <ClCompile Include="DynamicObject.cpp" />
+    <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="IngameState.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="StaticObject.cpp" />
@@ -239,7 +241,10 @@
     <ClInclude Include="Character.h" />
     <ClInclude Include="common.h" />
     <ClInclude Include="DynamicObject.h" />
+    <ClInclude Include="GameManager.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="GameState.h" />
+    <ClInclude Include="IngameState.h" />
     <ClInclude Include="ObjectList.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="StaticObject.h" />

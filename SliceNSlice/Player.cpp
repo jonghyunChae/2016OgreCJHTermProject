@@ -14,15 +14,30 @@ void CPlayer::buildObject(Root* pRoot, SceneManager* pSceneMgr, const char * obj
 {
 	_buildCamera(pRoot, pSceneMgr);
 
-	Entity* entity1 = pSceneMgr->createEntity(objName, "DustinBody.mesh"); //"paladin.MESH.mesh");
+	mCharacterRoot = pSceneMgr->getRootSceneNode()->createChildSceneNode("ProfessorRoot");
+	mCharacterYaw = mCharacterRoot->createChildSceneNode("ProfessorYaw");
+
+	mCameraYaw = mCharacterRoot->createChildSceneNode("CameraYaw", Vector3(0.0f, 120.0f, 0.0f));
+	mCameraPitch = mCameraYaw->createChildSceneNode("CameraPitch");
+	mCameraHolder = mCameraPitch->createChildSceneNode("CameraHolder", Vector3(0.0f, 80.0f, 500.0f));
+
+	Entity* mCharacterEntity = pSceneMgr->createEntity(objName, "DustinBody.mesh"); //"paladin.MESH.mesh");
 	SceneNode* playerNode = pSceneMgr->getRootSceneNode()->createChildSceneNode(objName, Vector3::ZERO);
-	playerNode->attachObject(entity1);
-	setNode(playerNode);
+	//playerNode->attachObject(mCharacterEntity);
+
+	//mCharacterEntity = pSceneMgr->createEntity("Professor", "DustinBody.mesh");
+	mCharacterYaw->attachObject(mCharacterEntity);
+	//mCharacterEntity->setCastShadows(true);
+
+	mCameraHolder->attachObject(mCamera);
+	mCamera->lookAt(mCameraYaw->getPosition());
+
+	setNode(mCharacterRoot);
 
 	CCharacter::buildObject(pRoot, pSceneMgr, objName);
 //	Entity* entity2 = pSceneMgr->createEntity("Camera", "DustinBody.mesh");
-	mpCameraNode          = playerNode->createChildSceneNode("Camera", Vector3(0.0f, 200.0f, 400.0f));
-	mpCameraNode->setInheritOrientation(true);
+	//mpCameraNode          = mCharacterYaw
+	mCameraHolder->setInheritOrientation(true);
 //	mpCameraNode->attachObject(entity2);
 
 }
@@ -32,7 +47,7 @@ void CPlayer::update(float frameTime)
 	CCharacter::update(frameTime);
 
 	const Vector3& vecPos = mpNode->getPosition();
-	const Vector3& vecCamera = mpCameraNode->getPosition();
+	const Vector3& vecCamera = mCameraHolder->getPosition();
 
 	mCamera->setPosition(vecPos + vecCamera);
 	mCamera->lookAt(vecPos - vecCamera);
@@ -40,10 +55,11 @@ void CPlayer::update(float frameTime)
 
 void CPlayer::_buildCamera(Root * pRoot, SceneManager * pSceneMgr)
 {
-	mCamera = pSceneMgr->createCamera("PlayerCamera");
+	mCamera = pSceneMgr->getCamera("main");
 
-	mCamera->setPosition(0.0f, 150.0f, 500.0f);
-	mCamera->lookAt(0.0f, 50.0f, 0.0f);
+	//mCamera->setPosition(0.0f, 150.0f, 500.0f);
+	//mCamera->lookAt(0.0f, 50.0f, 0.0f);
 
 	setCamera(mCamera);
+
 }

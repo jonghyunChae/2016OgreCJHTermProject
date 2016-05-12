@@ -25,6 +25,12 @@ private:
 	Camera * mCamera;
 	SceneNode * mpCameraNode;
 
+	Ogre::SceneNode* mCharacterRoot;
+	Ogre::SceneNode* mCharacterYaw;
+	Ogre::SceneNode* mCameraHolder;
+	Ogre::SceneNode* mCameraYaw;
+	Ogre::SceneNode* mCameraPitch;
+
 };
 
 #endif
