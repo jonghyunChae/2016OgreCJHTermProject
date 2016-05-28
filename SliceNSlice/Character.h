@@ -15,13 +15,16 @@ public:
 	virtual void update(float fFrameTime);
 
 public:
-	void insertAnimationState(OBJ_STATE state, string & animName) { mAnimList[state] = animName; }
+	void insertAnimationState(SceneNode * bodyRoot, OBJ_STATE state, string & meshName, string & animName); 
 	void setAnimation(string name);
-
+	Entity* getAnimEntity(OBJ_STATE state) { return mSceneMgr->getEntity(mAnimList[state]); }
 
 protected:
 	virtual void _rotate(float frameTime);
 	virtual void _walking(float frameTime);
+
+protected:
+	SceneManager * mSceneMgr;
 
 private:
 	void _checkAnimState(OBJ_STATE before, OBJ_STATE after);

@@ -17,18 +17,18 @@ CPlayer::~CPlayer()
 
 void CPlayer::buildObject(Root* pRoot, SceneManager* pSceneMgr, const char * objName)
 {
+	mSceneMgr = pSceneMgr;
+	mCharacterRoot = pSceneMgr->getRootSceneNode()->createChildSceneNode("PlayerRoot");
+	mCharacterYaw = mCharacterRoot->createChildSceneNode("PlayerYaw");
 
-	mCharacterRoot = pSceneMgr->getRootSceneNode()->createChildSceneNode("ProfessorRoot");
-	mCharacterYaw = mCharacterRoot->createChildSceneNode("ProfessorYaw");
-
-	Entity* characterEntity = pSceneMgr->createEntity(objName, "DustinBody.mesh"); //"paladin.MESH.mesh");
-	mCharacterYaw->attachObject(characterEntity);
-	characterEntity->setCastShadows(true);
+	//Entity* characterEntity = pSceneMgr->createEntity(objName, "DustinBody.mesh"); //"paladin.MESH.mesh");
+	//mCharacterYaw->attachObject(characterEntity);
+	//characterEntity->setCastShadows(true);
 
 	_buildCamera(pRoot, pSceneMgr);
 
 	mpNode = mCharacterRoot;
-	mpEntity = characterEntity;
+	//mpEntity = characterEntity;
 }
 
 void CPlayer::update(float frameTime)

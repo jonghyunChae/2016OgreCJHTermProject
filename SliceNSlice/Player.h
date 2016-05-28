@@ -15,6 +15,7 @@ public:
 	virtual void update(float fFrameTime);
 
 public:
+	Ogre::SceneNode* GetYawNode() { return mCharacterYaw; }
 	void setCamera(Camera * pCamera) { mCamera = pCamera; }
 	Camera* getCamera() { return mCamera; }
 
@@ -23,6 +24,7 @@ public:
 protected :
 	void setCameraDragSpeed(float speed) { mCameraDragSpeed = speed; }
 	void setCameraOffsetMaxLength(float length) { mOffsetMaxLength = length; }
+
 
 private:
 	void _buildCamera(Root* pRoot, SceneManager * pSceneMgr);

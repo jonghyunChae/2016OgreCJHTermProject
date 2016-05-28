@@ -25,7 +25,7 @@ void InGameState::enter()
 
 
 	mpPlayer = new CWarriorPlayer();
-	mpPlayer->buildObject(mRoot, mSceneMgr, "Professor");
+	mpPlayer->buildObject(mRoot, mSceneMgr, "Warrior");
 	mpPlayer->setAnimation("Idle");
 
 
