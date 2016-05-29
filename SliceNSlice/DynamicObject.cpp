@@ -96,7 +96,7 @@ bool CDynamicObject::changeState(const Vector3 & before, const Vector3 & afterVe
 void CDynamicObject::moveToPoint(const Vector3 & pos)
 {
 	mTargetPos        = pos;
-	Vector3 mypos     = mpNode->getPosition();
+	const Vector3 mypos = mpNode->getPosition();
 	Vector3 Direction = mTargetPos - mypos;
 	mTargetDistance   = Direction.normalise();
 
@@ -111,9 +111,8 @@ void CDynamicObject::move(const Vector3 & addVelocity)
 	Vector3 before  = mVelocity;
 	mVelocity	    += addVelocity;
 
-	Vector3 after = mVelocity;
-	after.normalise();
-	mDir = after;
+	const Vector3 after = mVelocity;
+	mDir = after.normalisedCopy();
 	changeState(before, mDir);
 
 	mTargetDistance = 0.f;

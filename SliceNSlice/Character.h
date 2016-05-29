@@ -16,8 +16,10 @@ public:
 
 public:
 	void insertAnimationState(SceneNode * bodyRoot, OBJ_STATE state, string & meshName, string & animName); 
-	void setAnimation(string name);
+	void setAnimation(string name, bool loop = true);
+	void setAnimation(OBJ_STATE stat, bool loop = true);
 	Entity* getAnimEntity(OBJ_STATE state) { return mSceneMgr->getEntity(mAnimList[state]); }
+	AnimationState* getAnimState() { return mAnimationState; }
 
 protected:
 	virtual void _rotate(float frameTime);
@@ -29,6 +31,7 @@ protected:
 private:
 	void _checkAnimState(OBJ_STATE before, OBJ_STATE after);
 	void _initNodeOffset();
+	void _animUpdate(float frameTime);
 
 private:
 	OBJ_STATE mBeforeState;

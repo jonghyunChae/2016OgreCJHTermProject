@@ -210,6 +210,8 @@
     <ClCompile Include="TitleState.cpp" />
     <ClCompile Include="WarriorPlayer.cpp" />
     <ClCompile Include="WarriorPlayerState.cpp" />
+    <ClCompile Include="WarZombie.cpp" />
+    <ClCompile Include="WarZombieState.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="resource.zip">
@@ -258,6 +260,8 @@
     <ClInclude Include="TitleState.h" />
     <ClInclude Include="WarriorPlayer.h" />
     <ClInclude Include="WarriorPlayerState.h" />
+    <ClInclude Include="WarZombie.h" />
+    <ClInclude Include="WarZombieState.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Title.overlay" />

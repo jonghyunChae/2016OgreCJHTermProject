@@ -72,6 +72,12 @@
     <ClCompile Include="PlayInfoStatus.cpp">
       <Filter>Objects\etc</Filter>
     </ClCompile>
+    <ClCompile Include="WarZombie.cpp">
+      <Filter>Objects\Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="WarZombieState.cpp">
+      <Filter>Objects\Monster</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="resource.zip">
@@ -132,6 +138,12 @@
     </ClInclude>
     <ClInclude Include="PlayInfoStatus.h">
       <Filter>Objects\etc</Filter>
+    </ClInclude>
+    <ClInclude Include="WarZombie.h">
+      <Filter>Objects\Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="WarZombieState.h">
+      <Filter>Objects\Monster</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -13,14 +13,15 @@ void CWarriorPlayer::buildObject(Root* pRoot, SceneManager* pSceneMgr, const cha
 	CPlayer::buildObject(pRoot, pSceneMgr, objName);
 
 	setMaxSpeed(200.f);
-	setCameraDragSpeed(100.f);
+	setCameraDragSpeed(50.f);
 
 	auto yaw = getYawNode();
 	yaw->scale(Vector3(0.01f, 0.01f, 0.01f));
 	yaw->rotate(Vector3(1, 0, 0), Degree(90));
 
-	insertAnimationState(yaw, eIDLE, string("Idle.mesh"), string("Idle"));
-	insertAnimationState(yaw, eWALKING, string("Walk.mesh"), string("Walk"));
+	insertAnimationState(yaw, eIDLE,    string("Idle.mesh"),  string("Idle"));
+	insertAnimationState(yaw, eWALKING, string("Walk.mesh"),  string("Walk"));
+	insertAnimationState(yaw, eATTACK,  string("Slash.mesh"), string("Slash"));
 
 	Entity* characterEntity = getAnimEntity(OBJ_STATE::eIDLE);
 	mpEntity = characterEntity;

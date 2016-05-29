@@ -1,7 +1,7 @@
 #include "WarriorPlayerState.h"
 #include "WarriorPlayer.h"
 
-CWarriorIdleState & CWarriorIdleState::GetInstance()
+CWarriorIdleState & CWarriorIdleState::getInstance()
 {
 	static CWarriorIdleState instance;
 	return instance;

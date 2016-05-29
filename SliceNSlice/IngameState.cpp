@@ -1,4 +1,5 @@
 #include "IngameState.h"
+#include "DynamicObject.h"
 //#include "common.h"
 //#include "ObjectList.h"
 //#include ""
@@ -20,6 +21,18 @@ void InGameState::enter()
 	mpPlayer->buildObject(mRoot, mSceneMgr, "Warrior");
 	mpPlayer->setAnimation("Idle");
 
+	char name[56];
+	for (int i = 0; i < 10; ++i)
+	{
+		sprintf(name, "Zombie%d", i);
+
+		CMonster * pMonster = new CWarZombie();
+		pMonster->buildObject(mRoot, mSceneMgr, name, i);
+		pMonster->setAnimation(CDynamicObject::eIDLE);
+		pMonster->getNode()->setPosition(Vector3(rand() % 400 - 200, 0, rand() % 400 - 200));
+		mpMonsters.push_back(pMonster);
+	}
+
 	_drawGridPlane();
 	_setLights();
 	_drawGroundPlane();
@@ -31,6 +44,12 @@ void InGameState::exit()
 	//mInformationOverlay->hide();
 
 	if (mpPlayer) delete mpPlayer;
+
+	for (auto & monster : mpMonsters)
+	{
+		delete monster;
+	}
+	mpMonsters.clear();
 }
 
 void InGameState::pause()
@@ -45,6 +64,10 @@ bool InGameState::frameStarted(GameManager * game, const Ogre::FrameEvent & evt)
 {
 	const float frameTime = evt.timeSinceLastFrame;
 	mpPlayer->update(frameTime);
+
+	for (auto & monster : mpMonsters)
+		monster->update(frameTime);
+
 	return true;
 }
 
@@ -61,6 +84,10 @@ bool InGameState::mouseMoved(GameManager * game, const OIS::MouseEvent & e)
 
 bool InGameState::mousePressed(GameManager * game, const OIS::MouseEvent & e, OIS::MouseButtonID id)
 {
+	if (e.state.buttonDown(OIS::MB_Right))
+	{
+		mpPlayer->setAnimation(CDynamicObject::eATTACK, false);
+	}
 	mpPlayer->setCanRotate(true);
 	return true;
 }

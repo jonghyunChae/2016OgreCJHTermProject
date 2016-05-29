@@ -13,7 +13,7 @@ class CWarriorIdleState : public CAIState<CWarriorPlayer>
 	CWarriorIdleState& operator=(const CWarriorIdleState&);
 
 public:
-	static CWarriorIdleState & GetInstance();
+	static CWarriorIdleState & getInstance();
 	virtual void Enter(CWarriorPlayer * pPlayer);
 	virtual void Execute(CWarriorPlayer * pPlayer, float fFrameTime);
 	virtual void Exit(CWarriorPlayer * pPlayer);

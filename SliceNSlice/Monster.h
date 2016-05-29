@@ -11,7 +11,8 @@ public:
 	CMonster();
 	virtual ~CMonster();
 
-
+	virtual void buildObject(Root* pRoot, SceneManager* pSceneMgr, const char * objName, int index);
+	virtual void update(float fFrameTime);
 };
 
 #endif

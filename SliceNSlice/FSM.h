@@ -3,9 +3,6 @@
 template <class obj>
 class CAIState
 {
-protected:
-	bool m_bCanChangeState;
-
 public:
 	CAIState() { m_bCanChangeState = true; }
 	virtual ~CAIState() {};
@@ -15,19 +12,15 @@ public:
 	virtual void Exit(obj*) = 0;
 
 	bool CanChange() { return m_bCanChangeState; }
+
+protected:
+	bool m_bCanChangeState;
+
 };
 
 template <class entity_type>
 class CStateMachine
 {
-private:
-
-	entity_type*          m_pOwner;
-
-	CAIState<entity_type>*   m_pCurrentState;
-	CAIState<entity_type>*   m_pPreviousState;
-	CAIState<entity_type>*   m_pGlobalState;
-
 public:
 	CStateMachine(entity_type* owner) :m_pOwner(owner),
 		m_pCurrentState(nullptr),
@@ -52,8 +45,6 @@ public:
 	//생존해 있을때만, 스테이트를 바꿀 수 있다.
 	void  ChangeState(CAIState<entity_type>* pNewState)
 	{
-		assert(pNewState && "<StateMachine::ChangeState>:trying to assign null state to current");
-
 		m_pPreviousState = m_pCurrentState;
 		m_pCurrentState->Exit(m_pOwner);
 		m_pCurrentState = pNewState;
@@ -75,5 +66,12 @@ public:
 	CAIState<entity_type>*  CurrentState()  const { return m_pCurrentState; }
 	CAIState<entity_type>*  GlobalState()   const { return m_pGlobalState; }
 	CAIState<entity_type>*  PreviousState() const { return m_pPreviousState; }
+
+private:
+	entity_type*          m_pOwner;
+
+	CAIState<entity_type>*   m_pCurrentState;
+	CAIState<entity_type>*   m_pPreviousState;
+	CAIState<entity_type>*   m_pGlobalState;
 };
 

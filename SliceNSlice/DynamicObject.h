@@ -27,7 +27,7 @@ public:
 	
 	void moveToPoint(const Vector3 & pos);
 	void move(const Vector3 & addVelocity);
-	enum OBJ_STATE { eNONE = -1, eIDLE, eWALKING, eROTATING };
+	enum OBJ_STATE { eNONE = -1, eIDLE, eWALKING, eROTATING, eATTACK, eDEATH };
 
 protected:
 	Vector3  mDir;

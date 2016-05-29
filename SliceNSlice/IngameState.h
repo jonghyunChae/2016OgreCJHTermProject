@@ -27,6 +27,8 @@ public:
 
 	static InGameState* getInstance() { return &mInGameState; }
 
+	CPlayer * getPlayer() { return mpPlayer; }
+
 private:
 	//InGameState() {}
 	~InGameState() {}
@@ -41,6 +43,7 @@ private:
 
 private:
 	CPlayer * mpPlayer;
+	std::vector<CMonster*> mpMonsters;
 
 	Ogre::Root *mRoot;
 	Ogre::RenderWindow* mWindow;
