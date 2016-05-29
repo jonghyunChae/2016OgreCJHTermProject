@@ -19,26 +19,20 @@
     <Filter Include="Framework">
       <UniqueIdentifier>{b543ed23-6923-4fc3-ac69-704c3734dd0e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Objects">
+      <UniqueIdentifier>{2388ac93-5a29-4074-b833-ad05775e8736}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Objects\Monster">
+      <UniqueIdentifier>{394ac1bc-a769-48d3-9029-149d194fc168}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Objects\Player">
+      <UniqueIdentifier>{361a8aca-a952-4608-90bf-c550b5feff67}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Objects\etc">
+      <UniqueIdentifier>{027e5622-c669-4bcb-8d98-362a7f6ddb01}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="GameObject.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="DynamicObject.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="StaticObject.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Character.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="WarriorPlayer.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="GameManager.cpp">
       <Filter>Framework</Filter>
     </ClCompile>
@@ -47,6 +41,36 @@
     </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="TitleState.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Character.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="DynamicObject.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="StaticObject.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Objects\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="WarriorPlayer.cpp">
+      <Filter>Objects\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Monster.cpp">
+      <Filter>Objects\Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="WarriorPlayerState.cpp">
+      <Filter>Objects\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayInfoStatus.cpp">
+      <Filter>Objects\etc</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -64,27 +88,6 @@
     <ClInclude Include="common.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="GameObject.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="DynamicObject.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="ObjectList.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="StaticObject.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Character.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="WarriorPlayer.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="GameManager.h">
       <Filter>Framework</Filter>
     </ClInclude>
@@ -94,5 +97,46 @@
     <ClInclude Include="IngameState.h">
       <Filter>Scene</Filter>
     </ClInclude>
+    <ClInclude Include="TitleState.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="FSM.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="DynamicObject.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectList.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="StaticObject.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Character.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Objects\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="WarriorPlayer.h">
+      <Filter>Objects\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Monster.h">
+      <Filter>Objects\Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="WarriorPlayerState.h">
+      <Filter>Objects\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayInfoStatus.h">
+      <Filter>Objects\etc</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Title.overlay">
+      <Filter>리소스 파일</Filter>
+    </None>
   </ItemGroup>
 </Project>

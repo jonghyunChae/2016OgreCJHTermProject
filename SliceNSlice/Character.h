@@ -28,13 +28,16 @@ protected:
 
 private:
 	void _checkAnimState(OBJ_STATE before, OBJ_STATE after);
+	void _initNodeOffset();
 
 private:
 	OBJ_STATE mBeforeState;
 
 	std::map<OBJ_STATE, string> mAnimList;
 	AnimationState* mAnimationState;
+	Ogre::SceneNode * mCurrentNode;
 
+	Vector3 mOffsetVector;
 };
 
 #endif

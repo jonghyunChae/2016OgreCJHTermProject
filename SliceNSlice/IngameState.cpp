@@ -16,22 +16,13 @@ void InGameState::enter()
 	mCamera = mSceneMgr->getCamera("main");
 	mCamera->setPosition(Ogre::Vector3::ZERO);
 
-	_drawGridPlane();
-	_setLights();
-	//_drawGroundPlane();
-
-	//mInformationOverlay = OverlayManager::getSingleton().getByName("Overlay/Information");
-	//mInformationOverlay->show();
-
-
 	mpPlayer = new CWarriorPlayer();
 	mpPlayer->buildObject(mRoot, mSceneMgr, "Warrior");
 	mpPlayer->setAnimation("Idle");
 
-
-	//mAnimationState = mCharacterEntity->getAnimationState("Run");
-	//mAnimationState->setLoop(true);
-	//mAnimationState->setEnabled(true);
+	_drawGridPlane();
+	_setLights();
+	_drawGroundPlane();
 }
 
 void InGameState::exit()
@@ -70,11 +61,13 @@ bool InGameState::mouseMoved(GameManager * game, const OIS::MouseEvent & e)
 
 bool InGameState::mousePressed(GameManager * game, const OIS::MouseEvent & e, OIS::MouseButtonID id)
 {
+	mpPlayer->setCanRotate(true);
 	return true;
 }
 
 bool InGameState::mouseReleased(GameManager * game, const OIS::MouseEvent & e, OIS::MouseButtonID id)
 {
+	mpPlayer->setCanRotate(false);
 	return true;
 }
 
@@ -122,11 +115,11 @@ void InGameState::_drawGridPlane(void)
 	gridPlane->begin("GridPlaneMaterial", Ogre::RenderOperation::OT_LINE_LIST);
 	for (int i = 0; i < 41; i++)
 	{
-		gridPlane->position(-2000.0f, 0.0f, 2000.0f - i * 100);
-		gridPlane->position(2000.0f, 0.0f, 2000.0f - i * 100);
+		gridPlane->position(-2000.0f, 1.0f, 2000.0f - i * 100);
+		gridPlane->position(2000.0f, 1.0f, 2000.0f - i * 100);
 
-		gridPlane->position(-2000.f + i * 100, 0.f, 2000.0f);
-		gridPlane->position(-2000.f + i * 100, 0.f, -2000.f);
+		gridPlane->position(-2000.f + i * 100, 1.f, 2000.0f);
+		gridPlane->position(-2000.f + i * 100, 1.f, -2000.f);
 	}
 
 	gridPlane->end();
@@ -136,5 +129,55 @@ void InGameState::_drawGridPlane(void)
 
 void InGameState::_setLights(void)
 {
-	mSceneMgr->setAmbientLight(ColourValue(10.0f, 10.0f, 10.0f));
+	mSceneMgr->setAmbientLight(ColourValue(0.1f, 0.1f, 0.1f));
+	mSceneMgr->setShadowTechnique(SHADOWTYPE_STENCIL_ADDITIVE);
+	
+	Light* light;
+
+	light = mSceneMgr->createLight("DirectLight");
+	light->setType(Light::LT_DIRECTIONAL);
+	light->setDirection(Vector3(1, -2.0f, -1).normalisedCopy());
+	light->setDiffuseColour(ColourValue(0.4f, 0.1f, 0.1f));
+	light->setVisible(true);
+	
+	light = mSceneMgr->createLight("PlayerLight");
+#if 1
+	light->setType(Light::LT_SPOTLIGHT);
+	light->setDirection(Ogre::Vector3::NEGATIVE_UNIT_Y);
+	light->setPosition(Vector3(0, 100, 0));
+	light->setDiffuseColour(ColourValue(2.f, 2.f, 2.f));
+	light->setSpotlightRange(Degree(20), Degree(80));
+	light->setVisible(true);
+#endif
+#if 0
+	light->setType(Light::LT_POINT);
+	light->setPosition(Vector3(0, 100, 0));
+	light->setDiffuseColour(ColourValue(1.f, 1.f, 1.f));
+	light->setVisible(true);
+#endif
+	SceneNode * lightNode = 
+		mpPlayer->getRootNode()->createChildSceneNode("PlayerLight", Vector3(0, 100, 0));
+
+	lightNode->attachObject(light);
+}
+
+void InGameState::_drawGroundPlane(void)
+{
+	Plane plane(Vector3::UNIT_Y, 0);
+	MeshManager::getSingleton().createPlane(
+		"Ground",
+		ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
+		plane,
+		5000, 5000,
+		1, 1,
+		true, 1, 100, 100,
+		Vector3::NEGATIVE_UNIT_Z
+		);
+
+	Entity* groundEntity = mSceneMgr->createEntity("GroundPlane", "Ground");
+	mSceneMgr->getRootSceneNode()->createChildSceneNode()->attachObject(groundEntity);
+	groundEntity->setMaterialName("Terrain");
+	groundEntity->setCastShadows(false);
+	Ogre::MaterialManager::getSingleton().getByName("Terrain")->setReceiveShadows(true);
+//	groundEntity->getMateri setReceiveShadows(true);
 }

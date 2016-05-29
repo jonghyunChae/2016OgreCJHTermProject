@@ -15,20 +15,25 @@ public:
 	virtual void update(float fFrameTime);
 
 public:
-	Ogre::SceneNode* GetYawNode() { return mCharacterYaw; }
+	Ogre::SceneNode* getYawNode() { return mCharacterYaw; }
+	Ogre::SceneNode* getRootNode() { return mCharacterRoot; }
+
 	void setCamera(Camera * pCamera) { mCamera = pCamera; }
 	Camera* getCamera() { return mCamera; }
 
 	bool mouseMoved(const OIS::MouseEvent &evt);
 
+	void setCanRotate(bool rot) { mCanRotate = rot; }
+	bool getCanRotate() { return mCanRotate; }
+
 protected :
 	void setCameraDragSpeed(float speed) { mCameraDragSpeed = speed; }
 	void setCameraOffsetMaxLength(float length) { mOffsetMaxLength = length; }
 
-
 private:
 	void _buildCamera(Root* pRoot, SceneManager * pSceneMgr);
-
+	void _updateCamera(float frameTime);
+	
 private:
 	Vector3 mOffsetCamera;
 	Camera * mCamera;
@@ -43,6 +48,8 @@ private:
 private:
 	float mCameraDragSpeed;
 	float mOffsetMaxLength;
+
+	bool mCanRotate;
 };
 
 #endif

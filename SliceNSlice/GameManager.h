@@ -11,14 +11,6 @@
 #endif
 
 #include "common.h"
-//#include <Ogre.h>
-//#include <Overlay/OgreOverlay.h>
-//#include <Overlay/OgreOverlaySystem.h>
-//#include <Overlay/OgreOverlayManager.h>
-//#include <Overlay/OgreOverlayElement.h>
-//#include <Overlay/OgreTextAreaOverlayElement.h>
-//#include <Overlay/OgreFontManager.h>
-//#include <OIS/OIS.h>
 
 class GameState;
 

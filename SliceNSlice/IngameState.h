@@ -37,7 +37,7 @@ private:
 
 	void _drawGridPlane(void);
 	void _setLights(void);
-
+	void _drawGroundPlane(void);
 
 private:
 	CPlayer * mpPlayer;
@@ -55,11 +55,11 @@ private:
 	Ogre::SceneNode* mCameraYaw;
 	Ogre::SceneNode* mCameraPitch;
 
+	Ogre::SceneNode* mPlayerLight;
+
 	Ogre::Entity* mCharacterEntity;
 
 	Ogre::AnimationState* mAnimationState;
-
-	//Ogre::Overlay*           mInformationOverlay;
 };
 
 

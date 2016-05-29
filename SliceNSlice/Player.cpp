@@ -5,6 +5,8 @@ CPlayer::CPlayer() : CCharacter()
 	mCamera = nullptr;
 	mpCameraNode = nullptr;
 
+	mCanRotate = true;
+
 	mCameraDragSpeed = 0.f;
 	mOffsetMaxLength = 0.f;
 
@@ -21,10 +23,6 @@ void CPlayer::buildObject(Root* pRoot, SceneManager* pSceneMgr, const char * obj
 	mCharacterRoot = pSceneMgr->getRootSceneNode()->createChildSceneNode("PlayerRoot");
 	mCharacterYaw = mCharacterRoot->createChildSceneNode("PlayerYaw");
 
-	//Entity* characterEntity = pSceneMgr->createEntity(objName, "DustinBody.mesh"); //"paladin.MESH.mesh");
-	//mCharacterYaw->attachObject(characterEntity);
-	//characterEntity->setCastShadows(true);
-
 	_buildCamera(pRoot, pSceneMgr);
 
 	mpNode = mCharacterRoot;
@@ -35,6 +33,36 @@ void CPlayer::update(float frameTime)
 {
 	CCharacter::update(frameTime);
 
+	_updateCamera(frameTime);
+}
+
+bool CPlayer::mouseMoved(const OIS::MouseEvent & evt)
+{
+	if (false == mCanRotate) return true;
+
+	mCameraYaw->yaw(Degree(-evt.state.X.rel));
+	mCameraPitch->pitch(Degree(-evt.state.Y.rel));
+
+	mCameraHolder->translate(Ogre::Vector3(0, 0, -evt.state.Z.rel * 0.1f));
+	return true;
+}
+
+void CPlayer::_buildCamera(Root * pRoot, SceneManager * pSceneMgr)
+{
+	mCamera = pSceneMgr->getCamera("main");
+	setCamera(mCamera);
+
+	mCameraYaw = mCharacterRoot->createChildSceneNode("CameraYaw", Vector3(0.0f, 80.0f, 0.0f));
+	mCameraPitch = mCameraYaw->createChildSceneNode("CameraPitch");
+	mCameraHolder = mCameraPitch->createChildSceneNode("CameraHolder", Vector3(0.0f, 50.0f, 200.0f));
+
+	mCameraHolder->attachObject(mCamera);
+	mCamera->lookAt(mCameraYaw->getPosition());
+	mCameraYaw->setInheritOrientation(false);
+}
+
+void CPlayer::_updateCamera(float frameTime)
+{
 	if (mCameraDragSpeed == 0.f) return;
 
 	if (mState == eWALKING)
@@ -66,27 +94,4 @@ void CPlayer::update(float frameTime)
 			}
 		}
 	}
-}
-
-bool CPlayer::mouseMoved(const OIS::MouseEvent & evt)
-{
-	mCameraYaw->yaw(Degree(-evt.state.X.rel));
-	mCameraPitch->pitch(Degree(-evt.state.Y.rel));
-
-	mCameraHolder->translate(Ogre::Vector3(0, 0, -evt.state.Z.rel * 0.1f));
-	return true;
-}
-
-void CPlayer::_buildCamera(Root * pRoot, SceneManager * pSceneMgr)
-{
-	mCamera = pSceneMgr->getCamera("main");
-	setCamera(mCamera);
-
-	mCameraYaw = mCharacterRoot->createChildSceneNode("CameraYaw", Vector3(0.0f, 120.0f, 0.0f));
-	mCameraPitch = mCameraYaw->createChildSceneNode("CameraPitch");
-	mCameraHolder = mCameraPitch->createChildSceneNode("CameraHolder", Vector3(0.0f, 80.0f, 500.0f));
-
-	mCameraHolder->attachObject(mCamera);
-	mCamera->lookAt(mCameraYaw->getPosition());
-	mCameraYaw->setInheritOrientation(false);
 }

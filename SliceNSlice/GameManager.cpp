@@ -40,19 +40,16 @@ void GameManager::init(void)
 
   mSceneMgr = mRoot->createSceneManager(ST_GENERIC, "main");
 
-//  Ogre::OverlaySystem* mOverlaySystem = new Ogre::OverlaySystem();
-//  mSceneMgr->addRenderQueueListener(mOverlaySystem);
-
+  Ogre::OverlaySystem* mOverlaySystem = new Ogre::OverlaySystem();
+  mSceneMgr->addRenderQueueListener(mOverlaySystem);
 
   mCamera = mSceneMgr->createCamera("main");
 
   mViewport = mWindow->addViewport(mCamera);
-  mViewport->setBackgroundColour(ColourValue(0.0f,0.0f,0.0f));
+  mViewport->setBackgroundColour(ColourValue(0.5f, 0.5f, 0.5f));
   mCamera->setAspectRatio(Real(mViewport->getActualWidth()) / Real(mViewport->getActualHeight()));
 
-
-
-  ResourceGroupManager::getSingleton().addResourceLocation("resource2.zip", "Zip");
+  ResourceGroupManager::getSingleton().addResourceLocation("resource.zip", "Zip");
   ResourceGroupManager::getSingleton().addResourceLocation("./", "FileSystem");
   ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
 

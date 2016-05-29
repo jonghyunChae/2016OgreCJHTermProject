@@ -8,7 +8,7 @@
 
 //#include "GameState.h"
 #include "GameManager.h"
-#include "IngameState.h"
+#include "TitleState.h"
 
 //using namespace Ogre;
 #ifdef __cplusplus
@@ -25,7 +25,7 @@ extern "C" {
 	  try
 	  {
 		  game.init();
-		  game.changeState(InGameState::getInstance());
+		  game.changeState(TitleState::getInstance());
 		  game.go();
 	  }
 	  catch( Ogre::Exception& e ) {
