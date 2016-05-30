@@ -59,9 +59,8 @@ void CCharacter::insertAnimationState(SceneNode * bodyRoot, OBJ_STATE state, str
 	SceneNode * node = bodyRoot->createChildSceneNode(animName, Vector3::ZERO);
 	node->attachObject(entity);
 	node->rotate(Vector3(1, 0, 0), Degree(90));
-	//node->setInheritScale(false);
 	node->setVisible(false);
-	mCurrentNode = mpNode;
+	mCurrentNode = node;
 
 	mAnimList[state] = animName; 
 }
