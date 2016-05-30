@@ -1,5 +1,6 @@
 #include "IngameState.h"
 #include "DynamicObject.h"
+#include "WarriorPlayerState.h"
 //#include "common.h"
 //#include "ObjectList.h"
 //#include ""
@@ -17,25 +18,11 @@ void InGameState::enter()
 	mCamera = mSceneMgr->getCamera("main");
 	mCamera->setPosition(Ogre::Vector3::ZERO);
 
-	mpPlayer = new CWarriorPlayer();
-	mpPlayer->buildObject(mRoot, mSceneMgr, "Warrior");
-	mpPlayer->setAnimation("Idle");
-
-	char name[56];
-	for (int i = 0; i < 10; ++i)
-	{
-		sprintf(name, "Zombie%d", i);
-
-		CMonster * pMonster = new CWarZombie();
-		pMonster->buildObject(mRoot, mSceneMgr, name, i);
-		pMonster->setAnimation(CDynamicObject::eIDLE);
-		pMonster->getNode()->setPosition(Vector3(rand() % 400 - 200, 0, rand() % 400 - 200));
-		mpMonsters.push_back(pMonster);
-	}
-
+	_buildObjects();
 	_drawGridPlane();
 	_setLights();
 	_drawGroundPlane();
+	_setResources();
 }
 
 void InGameState::exit()
@@ -44,7 +31,6 @@ void InGameState::exit()
 	//mInformationOverlay->hide();
 
 	if (mpPlayer) delete mpPlayer;
-
 	for (auto & monster : mpMonsters)
 	{
 		delete monster;
@@ -86,8 +72,18 @@ bool InGameState::mousePressed(GameManager * game, const OIS::MouseEvent & e, OI
 {
 	if (e.state.buttonDown(OIS::MB_Right))
 	{
-		mpPlayer->setAnimation(CDynamicObject::eATTACK, false);
+		CWarriorPlayer* player = static_cast<CWarriorPlayer*>(mpPlayer);
+		auto & monArray = player->getTargetMonsterArray();
+		monArray.clear();
+
+		for (auto & monster : mpMonsters)
+		{
+			if (false == monster->getStatus().isDeath())
+				monArray.push_back(monster);
+		}
+		player->getStateMachine()->ChangeState(&CWarriorAttackState::getInstance());
 	}
+
 	mpPlayer->setCanRotate(true);
 	return true;
 }
@@ -125,6 +121,25 @@ bool InGameState::keyReleased(GameManager * game, const OIS::KeyEvent & e)
 
 	}
 	return true;
+}
+
+void InGameState::_buildObjects(void)
+{
+	mpPlayer = new CWarriorPlayer();
+	mpPlayer->buildObject(mRoot, mSceneMgr, "Warrior");
+	mpPlayer->setAnimation("Idle");
+
+	char name[56];
+	for (int i = 0; i < 10; ++i)
+	{
+		sprintf(name, "Zombie%d", i);
+
+		CMonster * pMonster = new CWarZombie();
+		pMonster->buildObject(mRoot, mSceneMgr, name, i);
+		pMonster->setAnimation(CDynamicObject::eIDLE);
+		pMonster->getNode()->setPosition(Vector3(rand() % 400 - 200, 0, rand() % 400 - 200));
+		mpMonsters.push_back(pMonster);
+	}
 }
 
 void InGameState::_drawGridPlane(void)
@@ -207,4 +222,12 @@ void InGameState::_drawGroundPlane(void)
 	groundEntity->setCastShadows(false);
 	Ogre::MaterialManager::getSingleton().getByName("Terrain")->setReceiveShadows(true);
 //	groundEntity->getMateri setReceiveShadows(true);
+}
+
+void InGameState::_setResources(void)
+{
+	mSceneMgr->setSkyBox(true, "3D-Diggers/SkyBox", 10000);
+#if _DEBUG
+	mSceneMgr->setShowDebugShadows(true);
+#endif
 }

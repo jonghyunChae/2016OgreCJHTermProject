@@ -22,12 +22,14 @@ public:
 	void setMaxSpeed(float fSpeed) { mMaxSpeed = fSpeed; }
 
 public:
+	enum OBJ_STATE { eNONE = -1, eIDLE, eWALKING, eROTATING, eATTACK, eDEATH };
+
 	bool changeState(const Vector3 & before, const Vector3 & afterVelocity);
+	void changeState(OBJ_STATE stat) { mState = stat; }
 	bool isMovingToPoint() { return mTargetDistance > 0.f; }
 	
 	void moveToPoint(const Vector3 & pos);
 	void move(const Vector3 & addVelocity);
-	enum OBJ_STATE { eNONE = -1, eIDLE, eWALKING, eROTATING, eATTACK, eDEATH };
 
 protected:
 	Vector3  mDir;

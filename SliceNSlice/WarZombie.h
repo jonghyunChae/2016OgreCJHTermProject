@@ -16,6 +16,8 @@ public:
 	virtual void buildObject(Root* pRoot, SceneManager* pSceneMgr, const char * objName, int index);
 	virtual void update(float fFrameTime);
 
+	virtual bool damaged(int dmg);
+
 public:
 	CStateMachine<CWarZombie> * getStateMachine() { return mpStateMachine; }
 

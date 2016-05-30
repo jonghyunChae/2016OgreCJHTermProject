@@ -24,6 +24,7 @@ public:
 	const Vector3& getPosition() { return mpNode->getPosition(); }
 
 	SceneNode * const getNode() { return mpNode; }
+	virtual SceneNode * const getRotateNode() { return mpNode; }
 	void setNode(SceneNode * pNode) { mpNode = pNode; }
 
 protected:

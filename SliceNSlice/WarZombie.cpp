@@ -15,19 +15,20 @@ void CWarZombie::buildObject(Root * pRoot, SceneManager * pSceneMgr, const char 
 {
 	mSceneMgr = pSceneMgr;
 
-	setMaxSpeed(150.f);
-
-	mpNode = pSceneMgr->getRootSceneNode()->createChildSceneNode(objName, Vector3(0, 100000, 0));
+	setMaxSpeed(50.f);
+	//setMoveOffsetSpeed(50.f);
+	
+	mpNode = pSceneMgr->getRootSceneNode()->createChildSceneNode(objName, Vector3(0, 0, 0));
 	mpNode->scale(Vector3(0.004f, 0.004f, 0.004f));
 	//mpNode->translate(Vector3(0, 0, 0));
-	basicRotate(-Vector3::UNIT_Y);
+	//basicRotate(-Vector3::UNIT_Y);
 	//mpNode->rotate(Vector3(1, 0, 0), Degree(90));
 
 	static char animName[4][56];
-	sprintf(animName[0], "WarZombie_Idle%d", index);
-	sprintf(animName[1], "WarZombie_Walk%d", index);
+	sprintf(animName[0], "WarZombie_Idle%d",   index);
+	sprintf(animName[1], "WarZombie_Walk%d",   index);
 	sprintf(animName[2], "WarZombie_Attack%d", index);
-	sprintf(animName[3], "WarZombie_Death%d", index);
+	sprintf(animName[3], "WarZombie_Death%d",  index);
 	
 	insertAnimationState(mpNode, eIDLE, string("WarZombie_Idle.mesh"), string(animName[0]));
 	insertAnimationState(mpNode, eWALKING, string("WarZombie_Walk.mesh"), string(animName[1]));
@@ -48,4 +49,13 @@ void CWarZombie::update(float frameTime)
 	CMonster::update(frameTime);
 
 	mpStateMachine->Update(frameTime);
+}
+
+bool CWarZombie::damaged(int dmg)
+{
+	bool isDeath = mStatus.damaged(dmg);
+	if (isDeath)
+		mpStateMachine->ChangeState(&CWarZombieDeathState::getInstance());
+
+	return isDeath;
 }

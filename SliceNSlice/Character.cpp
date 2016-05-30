@@ -4,9 +4,13 @@ CCharacter::CCharacter() : CDynamicObject()
 {
 	mSceneMgr = nullptr;
 
+	mAutoChangeAnim = true;
+	mOffsetSpeed = 0.f;
+
 	mAnimationState = nullptr;
 	mCurrentNode = nullptr;
 	mBeforeState = eIDLE;
+
 
 	mOffsetVector = Vector3::ZERO;
 }
@@ -24,13 +28,9 @@ void CCharacter::update(float frameTime)
 {
 	CDynamicObject::update(frameTime);
 
-	if (false == getAnimState()->getLoop() && getAnimState()->hasEnded())
-		setAnimation(eIDLE);
-	
 	_animUpdate(frameTime);
-
 #if 0
-	if (mDir != Vector3::ZERO)
+	if (mDir != Vector3::ZERO && mState == eWALKING)
 	{
 		if (getAnimState()->hasEnded())
 		{
@@ -38,14 +38,17 @@ void CCharacter::update(float frameTime)
 		}
 		else
 		{
-			Vector3 offset = -mDir * 600 * frameTime;
+			Vector3 offset = -mDir * mOffsetSpeed * getAnimState()->getTimePosition();
 			mOffsetVector += offset;
-			mCurrentNode->setPosition(mOffsetVector);
-			Vector3 pos = mCurrentNode->getPosition();
-			pos += Vector3::ZERO;	
+			mCurrentNode->setPosition(-offset);
 		}
 	}
 #endif
+}
+
+bool CCharacter::damaged(int dmg)
+{
+	return mStatus.damaged(dmg);
 }
 
 void CCharacter::insertAnimationState(SceneNode * bodyRoot, OBJ_STATE state, string & meshName, string & animName)
@@ -55,8 +58,10 @@ void CCharacter::insertAnimationState(SceneNode * bodyRoot, OBJ_STATE state, str
 
 	SceneNode * node = bodyRoot->createChildSceneNode(animName, Vector3::ZERO);
 	node->attachObject(entity);
+	node->rotate(Vector3(1, 0, 0), Degree(90));
+	//node->setInheritScale(false);
 	node->setVisible(false);
-	mCurrentNode = node;
+	mCurrentNode = mpNode;
 
 	mAnimList[state] = animName; 
 }
@@ -87,7 +92,6 @@ void CCharacter::setAnimation(OBJ_STATE stat, bool loop)
 
 void CCharacter::_rotate(float frameTime)
 {
-
 }
 
 void CCharacter::_walking(float frameTime)
@@ -99,7 +103,7 @@ void CCharacter::_checkAnimState(OBJ_STATE before, OBJ_STATE after)
 	if (before != eIDLE && after == eIDLE)
 	{
 		_initNodeOffset();
-
+		//mOffsetVector = Vector3::ZERO;
 		setAnimation(mAnimList[eIDLE]);
 	}
 	if (before == eIDLE && after != eIDLE) 
@@ -109,17 +113,19 @@ void CCharacter::_checkAnimState(OBJ_STATE before, OBJ_STATE after)
 void CCharacter::_initNodeOffset()
 {
 	mCurrentNode->setPosition(Vector3(0, 0, 0));
-	//mCurrentNode->translate(mOffsetVector);
+	//mCurrentNode->translate(-mOffsetVector);
 	mOffsetVector = Vector3::ZERO;
 }
 
 void CCharacter::_animUpdate(float frameTime)
 {
-	if (false == getAnimState()->getLoop() && getAnimState()->hasEnded())
-		setAnimation(eIDLE);
+	if (mAutoChangeAnim)
+	{
+		if (false == getAnimState()->getLoop() && getAnimState()->hasEnded())
+			setAnimation(eIDLE);
 
-	_checkAnimState(mBeforeState, mState);
-	mBeforeState = mState;
-
+		_checkAnimState(mBeforeState, mState);
+		mBeforeState = mState;
+	}
 	mAnimationState->addTime(frameTime);
 }

@@ -1,6 +1,5 @@
 #include "PlayInfoStatus.h"
-
-
+#include "Character.h"
 
 PlayInfoStatus::PlayInfoStatus()
 {
@@ -10,9 +9,8 @@ PlayInfoStatus::PlayInfoStatus()
 	attackRange = 0.f;
 	attackSpeed = 0.f;
 
-	isDeath = false;
+	bDeath = false;
 }
-
 
 PlayInfoStatus::~PlayInfoStatus()
 {
@@ -21,5 +19,15 @@ PlayInfoStatus::~PlayInfoStatus()
 void PlayInfoStatus::init()
 {
 	hp = hpMax;
-	isDeath = false;
+	bDeath = false;
+}
+
+bool PlayInfoStatus::damaged(int dmg)
+{
+	hp -= dmg;
+
+	if (hp < 0)
+		bDeath = true;
+
+	return bDeath;
 }

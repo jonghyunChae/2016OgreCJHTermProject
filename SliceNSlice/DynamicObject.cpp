@@ -29,6 +29,8 @@ void CDynamicObject::update(float frameTime)
 {
 	if (mpChildObject) mpChildObject->update(frameTime);
 
+	SceneNode * rotNode = getRotateNode();
+
 	if (mState == eROTATING)
 	{
 		static const float ROTATION_TIME = 0.3f;
@@ -36,12 +38,12 @@ void CDynamicObject::update(float frameTime)
 		mRotatingTime += frameTime;
 		const Quaternion delta = Quaternion::Slerp(mRotatingTime / ROTATION_TIME, mSrcQuat, mDestQuat, true);
 
-		mpNode->setOrientation(delta);
+		rotNode->setOrientation(delta);
 		if (mRotatingTime >= ROTATION_TIME)
 		{
 			mRotatingTime = 0.f;
 			mState = eWALKING;
-			mpNode->setOrientation(mDestQuat);
+			rotNode->setOrientation(mDestQuat);
 		}
 	}
 	else if (mState == eWALKING)
@@ -51,16 +53,16 @@ void CDynamicObject::update(float frameTime)
 			mTargetDistance -= mMaxSpeed * frameTime;
 			if (mTargetDistance < 0.1f)
 			{
-				mpNode->setPosition(mTargetPos);
+				rotNode->setPosition(mTargetPos);
 				mTargetDistance = 0.f;
 				changeState(mVelocity, Vector3::ZERO);
 				return;
 			}
 		}
-		mpNode->translate(mDir * mMaxSpeed * frameTime);
+		rotNode->translate(mDir * mMaxSpeed * frameTime);
 
 		Quaternion rot = getBasicLookVector().getRotationTo(mDir);
-		mpNode->setOrientation(rot);
+		rotNode->setOrientation(rot);
 	}
 }
 

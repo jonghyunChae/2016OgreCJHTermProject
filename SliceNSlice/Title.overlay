@@ -8,10 +8,10 @@ Overlay/Title
 		  metrics_mode relative
 		  vert_align center
 		  horz_align center
-		  top -0.2
-		  left -0.15
-		  height 0.4
-		  width 0.3
+		  top -0.5
+		  left -0.5
+		  height 1.0
+		  width 1.0
 		  material KPU_LOGO
 		}
 		
@@ -19,7 +19,7 @@ Overlay/Title
     {
       metrics_mode relative
       horz_align center
-      top 0.8
+      top 0.9
       left -0.23
       font_name Font/NanumBold18
       char_height 0.05

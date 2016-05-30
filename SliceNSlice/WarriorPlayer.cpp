@@ -1,4 +1,5 @@
 #include "WarriorPlayer.h"
+#include "WarriorPlayerState.h"
 
 CWarriorPlayer::CWarriorPlayer()
 {
@@ -13,11 +14,12 @@ void CWarriorPlayer::buildObject(Root* pRoot, SceneManager* pSceneMgr, const cha
 	CPlayer::buildObject(pRoot, pSceneMgr, objName);
 
 	setMaxSpeed(200.f);
+	setMoveOffsetSpeed(800.f);
 	setCameraDragSpeed(50.f);
 
 	auto yaw = getYawNode();
 	yaw->scale(Vector3(0.01f, 0.01f, 0.01f));
-	yaw->rotate(Vector3(1, 0, 0), Degree(90));
+	//yaw->rotate(Vector3(1, 0, 0), Degree(90));
 
 	insertAnimationState(yaw, eIDLE,    string("Idle.mesh"),  string("Idle"));
 	insertAnimationState(yaw, eWALKING, string("Walk.mesh"),  string("Walk"));
@@ -27,9 +29,23 @@ void CWarriorPlayer::buildObject(Root* pRoot, SceneManager* pSceneMgr, const cha
 	mpEntity = characterEntity;
 	mpEntity->setVisible(true);
 	characterEntity->setCastShadows(true);
+
+	mpStateMachine = new CStateMachine<CWarriorPlayer>(this);
+	mpStateMachine->SetCurrentState(&CWarriorIdleState::getInstance());
 }
 
 void CWarriorPlayer::update(float frameTime)
 {
 	CPlayer::update(frameTime);
+
+	mpStateMachine->Update(frameTime);
+}
+
+bool CWarriorPlayer::damaged(int dmg)
+{
+	bool isDeath = mStatus.damaged(dmg);
+	if (isDeath)
+		mpStateMachine->ChangeState(&CWarriorDeathState::getInstance());
+
+	return isDeath;
 }

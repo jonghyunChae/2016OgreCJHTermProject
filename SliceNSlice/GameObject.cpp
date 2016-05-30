@@ -25,5 +25,5 @@ void CGameObject::basicRotate(Vector3 & toLook)
 {
 	Quaternion rot = Vector3::UNIT_Z.getRotationTo(toLook);
 	mpNode->rotate(rot);
-	mBasicLookVector = mpNode->getOrientation().zAxis().normalisedCopy();
+	mBasicLookVector = toLook.normalisedCopy();// mpNode->getOrientation().zAxis().normalisedCopy();
 }

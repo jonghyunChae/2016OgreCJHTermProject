@@ -9,9 +9,7 @@ void TitleState::enter(void)
 {
 	mContinue = true;
 	mTitleOverlay = OverlayManager::getSingleton().getByName("Overlay/Title");
-	//mStartMsg = OverlayManager::getSingleton().getOverlayElement("StartMsg");
 	mTitleOverlay->show();
-	//mStartMsg->show();
 
 	auto overlayMgr = OverlayManager::getSingletonPtr();
 	auto textOverlay = overlayMgr->create("TextOverlay");
@@ -19,18 +17,21 @@ void TitleState::enter(void)
 		(overlayMgr->createOverlayElement("Panel", "container1"));
 	panel->setDimensions(1, 1);
 	panel->setPosition(0.35f, 0.8f);
-	OverlayElement* textBox = overlayMgr->createOverlayElement("TextArea", "TextID");
-	textBox->setMetricsMode(Ogre::GMM_PIXELS);
-	textBox->setPosition(10, 10);
-	textBox->setWidth(100);
-	textBox->setHeight(20);
-	textBox->setParameter("font_name", "Font/NanumBold18");
-	textBox->setParameter("char_height", "40");
-	textBox->setColour(Ogre::ColourValue::White);
-	textBox->setCaption(L"게임시작 SpaceBar");
-	panel->addChild(textBox);
+	mStartMsg = overlayMgr->createOverlayElement("TextArea", "TextID");
+	mStartMsg->setMetricsMode(Ogre::GMM_PIXELS);
+	mStartMsg->setPosition(10, 10);
+	mStartMsg->setWidth(100);
+	mStartMsg->setHeight(20);
+	mStartMsg->setParameter("font_name", "Font/NanumBold18");
+	mStartMsg->setParameter("char_height", "40");
+	mStartMsg->setColour(Ogre::ColourValue::White);
+	mStartMsg->setCaption(L"게임시작 SpaceBar");
+	panel->addChild(mStartMsg);
 	textOverlay->add2D(panel);
 	textOverlay->show();
+
+	//mStartMsg = OverlayManager::getSingleton().getOverlayElement("StartMsg");
+	//mStartMsg->show();
 }
 
 void TitleState::exit(void)
@@ -55,13 +56,13 @@ bool TitleState::frameStarted(GameManager* game, const FrameEvent& evt)
 
 	elapsed += evt.timeSinceLastFrame;
 
-	if ((int)(elapsed * 4) % 2)
+	if ((int)(elapsed * 4) % 3)
 	{
-		//mStartMsg->show();
+		mStartMsg->show();
 	}
 	else
 	{
-		//mStartMsg->hide();
+		mStartMsg->hide();
 	}
 
 	return true;

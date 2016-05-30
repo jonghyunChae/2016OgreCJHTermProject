@@ -15,9 +15,14 @@ void CMonster::buildObject(Root * pRoot, SceneManager * pSceneMgr, const char * 
 
 	setMaxSpeed(150.f);
 
-	mpNode = pSceneMgr->getRootSceneNode()->createChildSceneNode(objName, Vector3::ZERO);
+	char nodeName[56];
+	sprintf(nodeName, "%sRoot", objName);
+	SceneNode * pRootNode = pSceneMgr->getRootSceneNode()->createChildSceneNode(nodeName, Vector3::ZERO);
+	mpNode = pRootNode->createChildSceneNode(objName);
 	mpNode->scale(Vector3(0.004f, 0.004f, 0.004f));
 	mpNode->rotate(Vector3(1, 0, 0), Degree(90));
+	mpNode->setInheritOrientation(false);
+	mpNode = pRootNode;
 
 	static char animName[4][56];
 	sprintf(animName[0], "WarZombie_Idle%d", index);

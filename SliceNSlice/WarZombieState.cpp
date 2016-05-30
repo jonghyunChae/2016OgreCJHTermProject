@@ -20,7 +20,7 @@ void CWarZombieIdleState::Enter(CWarZombie * pMonster)
 
 void CWarZombieIdleState::Execute(CWarZombie * pMonster, float fFrameTime)
 {
-	if (pPlayer->getPosition().squaredDistance(pMonster->getPosition()) < 3600)
+	if (pPlayer->getPosition().squaredDistance(pMonster->getPosition()) < chaseRangeSq)
 	{
 		pMonster->getStateMachine()->ChangeState(&CWarZombieChaseState::getInstance());
 	}
@@ -44,9 +44,9 @@ void CWarZombieChaseState::Enter(CWarZombie * pMonster)
 	Vector3 myPos = pMonster->getPosition();
 	Vector3 targetPos = pPlayer->getPosition();
 	targetPos.y = myPos.y;
-	pMonster->move((targetPos - myPos).normalisedCopy() * 30.f);
 
-//	pMonster->moveToPoint(targetPos);
+	pMonster->moveToPoint(targetPos);
+	pMonster->setAutoAnimChange(false);
 
 #if 0
 	auto quad = pMonster->getBasicLookVector().getRotationTo(-(targetPos - myPos).normalisedCopy());
@@ -56,12 +56,69 @@ void CWarZombieChaseState::Enter(CWarZombie * pMonster)
 
 void CWarZombieChaseState::Execute(CWarZombie * pMonster, float fFrameTime)
 {
-	if (pPlayer->getPosition().squaredDistance(pMonster->getPosition()) > 10000)
+	const Real targetDisSq = pPlayer->getPosition().squaredDistance(pMonster->getPosition());
+	if (targetDisSq > chaseRangeSq)
 	{
 		pMonster->getStateMachine()->ChangeState(&CWarZombieIdleState::getInstance());
+	}
+	if (targetDisSq < attackRangeSq)
+	{
+		pMonster->getStateMachine()->ChangeState(&CWarZombieAttackState::getInstance());
 	}
 }
 
 void CWarZombieChaseState::Exit(CWarZombie * pMonster)
 {
+	pMonster->setAutoAnimChange(true);
+}
+////////////////////////////////////////////////////////////////////////
+
+CWarZombieAttackState & CWarZombieAttackState::getInstance()
+{
+	static CWarZombieAttackState instance;
+	return instance;
+}
+
+void CWarZombieAttackState::Enter(CWarZombie * pMonster)
+{
+	pMonster->changeState(CDynamicObject::eATTACK);
+	pMonster->setAnimation(CDynamicObject::eATTACK);
+	pMonster->setAutoAnimChange(false);
+}
+
+void CWarZombieAttackState::Execute(CWarZombie * pMonster, float fFrameTime)
+{
+	const Real targetDisSq = pPlayer->getPosition().squaredDistance(pMonster->getPosition());
+	if (targetDisSq > attackRangeSq)
+	{
+		pMonster->getStateMachine()->ChangeState(&CWarZombieIdleState::getInstance());
+	}
+}
+
+void CWarZombieAttackState::Exit(CWarZombie * pMonster)
+{
+	pMonster->setAutoAnimChange(true);
+}
+
+
+///////////////////////////////////////////////////////////////////////
+CWarZombieDeathState & CWarZombieDeathState::getInstance()
+{
+	static CWarZombieDeathState instance;
+	return instance;
+}
+
+void CWarZombieDeathState::Enter(CWarZombie * pMonster)
+{
+	pMonster->setAnimation(CDynamicObject::eDEATH, false);
+	pMonster->setAutoAnimChange(false);
+}
+
+void CWarZombieDeathState::Execute(CWarZombie * pMonster, float fFrameTime)
+{
+}
+
+void CWarZombieDeathState::Exit(CWarZombie * pMonster)
+{
+	pMonster->setAutoAnimChange(true);
 }

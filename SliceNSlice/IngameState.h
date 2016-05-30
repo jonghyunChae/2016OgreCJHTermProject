@@ -37,9 +37,11 @@ private:
 
 	bool mContinue;
 
+	void _buildObjects(void);
 	void _drawGridPlane(void);
 	void _setLights(void);
 	void _drawGroundPlane(void);
+	void _setResources(void);
 
 private:
 	CPlayer * mpPlayer;

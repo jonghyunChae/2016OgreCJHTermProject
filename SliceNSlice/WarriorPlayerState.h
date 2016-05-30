@@ -8,16 +8,47 @@
 class CWarriorPlayer;
 class CWarriorIdleState : public CAIState<CWarriorPlayer>
 {
-	CWarriorIdleState(){}
-	virtual ~CWarriorIdleState() {}
-	CWarriorIdleState& operator=(const CWarriorIdleState&);
-
 public:
 	static CWarriorIdleState & getInstance();
 	virtual void Enter(CWarriorPlayer * pPlayer);
 	virtual void Execute(CWarriorPlayer * pPlayer, float fFrameTime);
 	virtual void Exit(CWarriorPlayer * pPlayer);
 
+private:
+	CWarriorIdleState(){}
+	virtual ~CWarriorIdleState() {}
+	CWarriorIdleState& operator=(const CWarriorIdleState&);
+};
+
+class CWarriorAttackState : public CAIState<CWarriorPlayer>
+{
+public:
+	static CWarriorAttackState & getInstance();
+	virtual void Enter(CWarriorPlayer * pPlayer);
+	virtual void Execute(CWarriorPlayer * pPlayer, float fFrameTime);
+	virtual void Exit(CWarriorPlayer * pPlayer);
+
+private:
+	CWarriorAttackState() {}
+	virtual ~CWarriorAttackState() {}
+	CWarriorAttackState& operator=(const CWarriorAttackState&);
+
+private:
+	const float attackRange = 80.f;
+};
+
+class CWarriorDeathState : public CAIState<CWarriorPlayer>
+{
+public:
+	static CWarriorDeathState & getInstance();
+	virtual void Enter(CWarriorPlayer * pPlayer);
+	virtual void Execute(CWarriorPlayer * pPlayer, float fFrameTime);
+	virtual void Exit(CWarriorPlayer * pPlayer);
+
+private:
+	CWarriorDeathState() {}
+	virtual ~CWarriorDeathState() {}
+	CWarriorDeathState& operator=(const CWarriorDeathState&);
 };
 
 #endif
