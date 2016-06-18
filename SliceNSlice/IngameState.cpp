@@ -55,6 +55,9 @@ bool InGameState::frameStarted(GameManager * game, const Ogre::FrameEvent & evt)
 	for (auto & monster : mpMonsters)
 		monster->update(frameTime);
 
+	for (auto & absorb : mpAbsorbs)
+		absorb->update(frameTime);
+
 	return true;
 }
 
@@ -129,9 +132,15 @@ bool InGameState::keyReleased(GameManager * game, const OIS::KeyEvent & e)
 
 void InGameState::msgDeathLocations(std::vector<Vector3>& vectorList)
 {
-	for (auto pos : vectorList)
-	{
+	auto posIter = vectorList.begin();
+	auto absotbIter = mpAbsorbs.begin();
 
+	while(posIter != vectorList.end())
+	{
+		bool result = (*absotbIter)->allocMarble(*posIter);
+		++absotbIter;
+
+		if (result) ++posIter;
 	}
 }
 
@@ -156,17 +165,9 @@ void InGameState::_buildObjects(void)
 
 	for (int i = 0; i < ABSORB_NUM; ++i)
 	{
-		char name[20];
-		sprintf(name, "Sphere%d", i);
-		Entity * entity = mSceneMgr->createEntity(name, "Sphere001.mesh");
-		entity->setCastShadows(true);
-
-		SceneNode * node = mSceneMgr->getRootSceneNode()->createChildSceneNode(name, Vector3::ZERO);
-		node->attachObject(entity);
-		node->setPosition(mpPlayer->getPosition());
-		node->scale(Vector3(0.01, 0.01, 0.01));
-
-		mpAbsorbs.push_back(node);
+		AbsorbMarble * marble = new AbsorbMarble();
+		marble->buildObject(mRoot, mSceneMgr, i);
+		mpAbsorbs.push_back(marble);
 	}
 
 }

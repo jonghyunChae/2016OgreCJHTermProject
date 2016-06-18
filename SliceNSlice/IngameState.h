@@ -51,7 +51,7 @@ private:
 	std::vector<CMonster*> mpMonsters;
 
 #define ABSORB_NUM 1000
-	std::vector<Ogre::SceneNode*> mpAbsorbs;
+	std::vector<AbsorbMarble*> mpAbsorbs;
 
 	Ogre::Root *mRoot;
 	Ogre::RenderWindow* mWindow;

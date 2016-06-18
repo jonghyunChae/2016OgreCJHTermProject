@@ -37,4 +37,5 @@ void PlayInfoStatus::healHP(int val)
 {
 	hp += val;
 	hp = min(hpMax, hp);
+	cout << "Heal" << hp << endl;
 }
