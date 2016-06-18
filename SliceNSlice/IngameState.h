@@ -29,6 +29,8 @@ public:
 
 	CPlayer * getPlayer() { return mpPlayer; }
 
+	void msgDeathLocations(std::vector<Vector3>& vectorList);
+
 private:
 	//InGameState() {}
 	~InGameState() {}
@@ -42,10 +44,14 @@ private:
 	void _setLights(void);
 	void _drawGroundPlane(void);
 	void _setResources(void);
+	void _buildUI(void);
 
 private:
 	CPlayer * mpPlayer;
 	std::vector<CMonster*> mpMonsters;
+
+#define ABSORB_NUM 1000
+	std::vector<Ogre::SceneNode*> mpAbsorbs;
 
 	Ogre::Root *mRoot;
 	Ogre::RenderWindow* mWindow;
@@ -65,6 +71,8 @@ private:
 	Ogre::Entity* mCharacterEntity;
 
 	Ogre::AnimationState* mAnimationState;
+
+	Ogre::Overlay* mHPBarOverlay;
 };
 
 

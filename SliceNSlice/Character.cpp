@@ -29,18 +29,18 @@ void CCharacter::update(float frameTime)
 	CDynamicObject::update(frameTime);
 
 	_animUpdate(frameTime);
-#if 0
+#if 1
 	if (mDir != Vector3::ZERO && mState == eWALKING)
 	{
-		if (getAnimState()->hasEnded())
+		if (getAnimState()->getTimePosition() <= 0.1) //getAnimState()->hasEnded())
 		{
 			_initNodeOffset();
 		}
 		else
 		{
-			Vector3 offset = -mDir * mOffsetSpeed * getAnimState()->getTimePosition();
+			Vector3 offset = -mDir * mOffsetSpeed * frameTime;//getAnimState()->getTimePosition();
 			mOffsetVector += offset;
-			mCurrentNode->setPosition(-offset);
+			//mpNode->translate(offset);
 		}
 	}
 #endif
@@ -111,9 +111,13 @@ void CCharacter::_checkAnimState(OBJ_STATE before, OBJ_STATE after)
 
 void CCharacter::_initNodeOffset()
 {
-	mCurrentNode->setPosition(Vector3(0, 0, 0));
-	//mCurrentNode->translate(-mOffsetVector);
+	auto vec = -mOffsetVector;
+	cout << vec.x << ", " << vec.y << ", " << vec.z << endl;
+	mpNode->translate(-mOffsetVector);
 	mOffsetVector = Vector3::ZERO;
+	//mCurrentNode->setPosition(Vector3(0, 0, 0));
+	//mCurrentNode->translate(-mOffsetVector);
+	//mOffsetVector = Vector3::ZERO;
 }
 
 void CCharacter::_animUpdate(float frameTime)

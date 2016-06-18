@@ -23,6 +23,7 @@ void InGameState::enter()
 	_setLights();
 	_drawGroundPlane();
 	_setResources();
+	_buildUI();
 }
 
 void InGameState::exit()
@@ -59,6 +60,10 @@ bool InGameState::frameStarted(GameManager * game, const Ogre::FrameEvent & evt)
 
 bool InGameState::frameEnded(GameManager * game, const Ogre::FrameEvent & evt)
 {
+	float hpRate = mpPlayer->getStatus().getHPRate();
+	mHPBarOverlay->setScale(hpRate, 1.0f);
+	mHPBarOverlay->setScroll(-0.88 * (1 - hpRate), 0);
+
 	return mContinue;
 }
 
@@ -118,9 +123,16 @@ bool InGameState::keyReleased(GameManager * game, const OIS::KeyEvent & e)
 	case OIS::KC_RIGHT: mpPlayer->move(-Vector3::UNIT_X);  break;
 	case OIS::KC_UP:    mpPlayer->move(Vector3::UNIT_Z); break;
 	case OIS::KC_DOWN:  mpPlayer->move(-Vector3::UNIT_Z);  break;
-
 	}
 	return true;
+}
+
+void InGameState::msgDeathLocations(std::vector<Vector3>& vectorList)
+{
+	for (auto pos : vectorList)
+	{
+
+	}
 }
 
 void InGameState::_buildObjects(void)
@@ -140,6 +152,23 @@ void InGameState::_buildObjects(void)
 		pMonster->getNode()->setPosition(Vector3(rand() % 400 - 200, 0, rand() % 400 - 200));
 		mpMonsters.push_back(pMonster);
 	}
+
+
+	for (int i = 0; i < ABSORB_NUM; ++i)
+	{
+		char name[20];
+		sprintf(name, "Sphere%d", i);
+		Entity * entity = mSceneMgr->createEntity(name, "Sphere001.mesh");
+		entity->setCastShadows(true);
+
+		SceneNode * node = mSceneMgr->getRootSceneNode()->createChildSceneNode(name, Vector3::ZERO);
+		node->attachObject(entity);
+		node->setPosition(mpPlayer->getPosition());
+		node->scale(Vector3(0.01, 0.01, 0.01));
+
+		mpAbsorbs.push_back(node);
+	}
+
 }
 
 void InGameState::_drawGridPlane(void)
@@ -222,6 +251,7 @@ void InGameState::_drawGroundPlane(void)
 	groundEntity->setCastShadows(false);
 	Ogre::MaterialManager::getSingleton().getByName("Terrain")->setReceiveShadows(true);
 //	groundEntity->getMateri setReceiveShadows(true);
+
 }
 
 void InGameState::_setResources(void)
@@ -230,4 +260,13 @@ void InGameState::_setResources(void)
 #if _DEBUG
 	mSceneMgr->setShowDebugShadows(true);
 #endif
+}
+
+void InGameState::_buildUI(void)
+{
+	mHPBarOverlay = OverlayManager::getSingleton().getByName("Overlay/GameUi/Hp");
+	mHPBarOverlay->show();
+
+	auto hpBar = OverlayManager::getSingleton().getByName("Overlay/GameUi/HpBar");
+	hpBar->show();
 }

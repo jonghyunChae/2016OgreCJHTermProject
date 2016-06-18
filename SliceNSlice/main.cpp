@@ -21,6 +21,14 @@ extern "C" {
   int main(int argc, char *argv[])
 #endif
   {
+	  if (AllocConsole())
+	  {
+		  freopen("CONIN$", "rb", stdin);
+		  freopen("CONOUT$", "wb", stdout);
+		  freopen("CONOUT$", "wb", stderr);
+		  std::ios::sync_with_stdio();
+	  }
+
 	  GameManager game;
 	  try
 	  {

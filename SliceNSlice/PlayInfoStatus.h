@@ -9,11 +9,17 @@ public:
 
 public:
 	void init();
-	bool damaged(int dmg);
 
 public:
 	bool isDeath() { return bDeath; }
 	CCharacter * getOwner() { return mpOwner; }
+
+	int getHP() { return hp; }
+	float getHPRate() { return (float)hp / (float)hpMax; }
+	void healHP(int val); 
+	bool damaged(int dmg);
+	void setHP(int val) { hpMax = hp = val; }
+	void resetHP() { hp = hpMax; }
 
 private:
 	int hp : 10;

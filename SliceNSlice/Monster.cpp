@@ -2,6 +2,7 @@
 
 CMonster::CMonster()
 {
+	mfDeathTime = 0.f;
 }
 
 CMonster::~CMonster()
@@ -43,5 +44,25 @@ void CMonster::buildObject(Root * pRoot, SceneManager * pSceneMgr, const char * 
 
 void CMonster::update(float fFrameTime)
 {
+	if (mStatus.isDeath())
+	{
+		mfDeathTime += fFrameTime;
+		if (mfDeathTime >= 4.0f)
+			mpEntity->setVisible(false);
+	}
+
 	CCharacter::update(fFrameTime);
+}
+
+bool CMonster::damaged(int dmg)
+{
+	bool death = mStatus.damaged(dmg);
+	if (death) mfDeathTime = 0.0f;
+	return death;
+}
+
+void CMonster::revive()
+{
+	mStatus.healHP(1000);
+
 }

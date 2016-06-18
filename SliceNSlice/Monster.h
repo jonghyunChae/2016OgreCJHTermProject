@@ -13,6 +13,15 @@ public:
 
 	virtual void buildObject(Root* pRoot, SceneManager* pSceneMgr, const char * objName, int index);
 	virtual void update(float fFrameTime);
+
+public:
+	virtual bool damaged(int dmg);
+	virtual void revive();
+
+	void setDeathTime(float time) { mfDeathTime = mfDeathTime; }
+
+private:
+	float mfDeathTime;
 };
 
 #endif

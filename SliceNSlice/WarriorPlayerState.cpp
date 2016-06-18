@@ -1,6 +1,7 @@
 #include "WarriorPlayerState.h"
 #include "WarriorPlayer.h"
 #include "Monster.h"
+#include "IngameState.h"
 
 CWarriorIdleState & CWarriorIdleState::getInstance()
 {
@@ -42,14 +43,21 @@ void CWarriorAttackState::Execute(CWarriorPlayer * pPlayer, float fFrameTime)
 		auto & monArray = pPlayer->getTargetMonsterArray();
 		const Vector3 & pos = pPlayer->getPosition();
 		
+		std::vector<Vector3> locations;
+
 		for (auto & mon : monArray)
 		{
 			if (false == mon->getStatus().isDeath())
 			{
-				if (mon->getPosition().distance(pos) < attackRange)
-					mon->damaged(10);
+				auto targetPos = mon->getPosition();
+				if (targetPos.distance(pos) < attackRange)
+					if (mon->damaged(10))
+						locations.push_back(targetPos);
 			}
 		}
+
+		if (!locations.empty())
+			InGameState::getInstance()->msgDeathLocations(locations);
 	}
 
 	if (pPlayer->getAnimState()->hasEnded())

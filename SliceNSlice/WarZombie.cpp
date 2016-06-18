@@ -13,8 +13,10 @@ CWarZombie::~CWarZombie()
 
 void CWarZombie::buildObject(Root * pRoot, SceneManager * pSceneMgr, const char * objName, int index)
 {
-	mSceneMgr = pSceneMgr;
+	mStatus.setHP(30);
 
+	mSceneMgr = pSceneMgr;
+	
 	setMaxSpeed(50.f);
 	//setMoveOffsetSpeed(50.f);
 	

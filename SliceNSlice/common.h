@@ -27,4 +27,6 @@
 using namespace Ogre;
 using namespace std;
 
+//ostream& operator<<(ostream& os, const Ogre::Vector3 & vec);
+
 #endif

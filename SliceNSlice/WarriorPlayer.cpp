@@ -13,9 +13,10 @@ void CWarriorPlayer::buildObject(Root* pRoot, SceneManager* pSceneMgr, const cha
 {
 	CPlayer::buildObject(pRoot, pSceneMgr, objName);
 
-	setMaxSpeed(200.f);
-	setMoveOffsetSpeed(800.f);
-	setCameraDragSpeed(50.f);
+	setMaxSpeed(50.f);
+	setMoveOffsetSpeed(100.f);
+	setCameraDragSpeed(30.f);
+	mStatus.setHP(100);
 
 	auto yaw = getYawNode();
 	yaw->scale(Vector3(0.01f, 0.01f, 0.01f));

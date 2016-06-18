@@ -29,7 +29,6 @@ void TitleState::enter(void)
 	panel->addChild(mStartMsg);
 	textOverlay->add2D(panel);
 	textOverlay->show();
-
 	//mStartMsg = OverlayManager::getSingleton().getOverlayElement("StartMsg");
 	//mStartMsg->show();
 }

@@ -25,9 +25,16 @@ void PlayInfoStatus::init()
 bool PlayInfoStatus::damaged(int dmg)
 {
 	hp -= dmg;
+	hp = max(0, hp);
 
-	if (hp < 0)
+	if (hp <= 0)
 		bDeath = true;
 
 	return bDeath;
+}
+
+void PlayInfoStatus::healHP(int val)
+{
+	hp += val;
+	hp = min(hpMax, hp);
 }

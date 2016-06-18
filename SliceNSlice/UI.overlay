@@ -1,0 +1,32 @@
+Overlay/GameUi/HpBar
+{
+		zorder 99
+		container Panel(HPBarBackGround)
+		{
+		  metrics_mode relative
+		  vert_align right
+		  horz_align top
+		  top -0.45
+		  left -0.45
+		  height 0.035
+		  width 0.255
+		  material UI_HP_Bar_BackGround
+		}
+}
+
+Overlay/GameUi/Hp
+{
+		zorder 100
+		container Panel(HPBar)
+		{
+		  metrics_mode relative
+		  vert_align right
+		  horz_align top
+		  top -0.445
+		  left -0.445
+		  height 0.025
+		  width 0.24
+		  material UI_HP_Bar
+		}
+}
+

@@ -197,7 +197,9 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AbsorbMarble.cpp" />
     <ClCompile Include="Character.cpp" />
+    <ClCompile Include="common.cpp" />
     <ClCompile Include="DynamicObject.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="GameObject.cpp" />
@@ -244,6 +246,7 @@
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AbsorbMarble.h" />
     <ClInclude Include="Character.h" />
     <ClInclude Include="common.h" />
     <ClInclude Include="DynamicObject.h" />
@@ -265,6 +268,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Title.overlay" />
+    <None Include="UI.overlay" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
