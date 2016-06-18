@@ -30,11 +30,16 @@ public:
 
 	PlayInfoStatus & getStatus() { return mStatus; }
 
+	void setAttackDelay(bool delay) { mAttackDelay = delay; }
+	bool isAttackDelay() { return mAttackDelay; }
+
 protected:
 	virtual void _rotate(float frameTime);
 	virtual void _walking(float frameTime);
 
 protected:
+	bool mAttackDelay;
+
 	SceneManager * mSceneMgr;
 	PlayInfoStatus mStatus;
 

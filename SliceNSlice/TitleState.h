@@ -31,6 +31,8 @@ public:
 	static TitleState* getInstance() { return &mTitleState; }
 
 private:
+	TitleState();
+
 	static TitleState mTitleState;
 
 	bool mContinue;

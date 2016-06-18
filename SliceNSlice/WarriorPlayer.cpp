@@ -3,10 +3,12 @@
 
 CWarriorPlayer::CWarriorPlayer()
 {
+	mpStateMachine = nullptr;
 }
 
 CWarriorPlayer::~CWarriorPlayer()
 {
+	if (mpStateMachine) delete mpStateMachine;
 }
 
 void CWarriorPlayer::buildObject(Root* pRoot, SceneManager* pSceneMgr, const char * objName)
@@ -25,6 +27,7 @@ void CWarriorPlayer::buildObject(Root* pRoot, SceneManager* pSceneMgr, const cha
 	insertAnimationState(yaw, eIDLE,    string("Idle.mesh"),  string("Idle"));
 	insertAnimationState(yaw, eWALKING, string("Walk.mesh"),  string("Walk"));
 	insertAnimationState(yaw, eATTACK,  string("Slash.mesh"), string("Slash"));
+	insertAnimationState(yaw, eDEATH,   string("Death.mesh"), string("Death"));
 
 	Entity* characterEntity = getAnimEntity(OBJ_STATE::eIDLE);
 	mpEntity = characterEntity;
@@ -44,9 +47,11 @@ void CWarriorPlayer::update(float frameTime)
 
 bool CWarriorPlayer::damaged(int dmg)
 {
+	if (mStatus.isDeath()) return false;
+
 	bool isDeath = mStatus.damaged(dmg);
-	//if (isDeath)
-	//	mpStateMachine->ChangeState(&CWarriorDeathState::getInstance());
+	if (isDeath)
+		mpStateMachine->ChangeState(&CWarriorDeathState::getInstance());
 
 	return isDeath;
 }

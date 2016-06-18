@@ -1,12 +1,15 @@
 #include "IngameState.h"
 #include "DynamicObject.h"
 #include "WarriorPlayerState.h"
+#include "GameOverState.h"
 //#include "common.h"
 //#include "ObjectList.h"
 //#include ""
 
 using namespace Ogre;
 InGameState  InGameState::mInGameState;
+
+GameManager * manager = nullptr;
 
 void InGameState::enter()
 {
@@ -35,10 +38,15 @@ void InGameState::exit()
 
 	if (mpPlayer) delete mpPlayer;
 	for (auto & monster : mpMonsters)
-	{
 		delete monster;
-	}
 	mpMonsters.clear();
+
+	for (auto & absorb : mpAbsorbs)
+		delete absorb;
+	mpAbsorbs.clear();
+
+	OverlayManager::getSingleton().getByName("Overlay/GameUi/Hp")->hide();
+	OverlayManager::getSingleton().getByName("Overlay/GameUi/HpBar")->hide();
 }
 
 void InGameState::pause()
@@ -51,6 +59,8 @@ void InGameState::resume()
 
 bool InGameState::frameStarted(GameManager * game, const Ogre::FrameEvent & evt)
 {
+	manager = game;
+
 	const float frameTime = evt.timeSinceLastFrame;
 	mfRegenTime -= frameTime;
 	bool regen = mfRegenTime < 0.0f;
@@ -97,6 +107,8 @@ bool InGameState::mousePressed(GameManager * game, const OIS::MouseEvent & e, OI
 	if (e.state.buttonDown(OIS::MB_Right))
 	{
 		CWarriorPlayer* player = static_cast<CWarriorPlayer*>(mpPlayer);
+		if (player->isAttackDelay()) return true;
+
 		auto & monArray = player->getTargetMonsterArray();
 		monArray.clear();
 
@@ -142,6 +154,8 @@ bool InGameState::keyReleased(GameManager * game, const OIS::KeyEvent & e)
 	case OIS::KC_RIGHT: mpPlayer->move(-Vector3::UNIT_X);  break;
 	case OIS::KC_UP:    mpPlayer->move(Vector3::UNIT_Z); break;
 	case OIS::KC_DOWN:  mpPlayer->move(-Vector3::UNIT_Z);  break;
+
+	case OIS::KC_D: mpPlayer->damaged(100); break;
 	}
 	return true;
 }
@@ -158,6 +172,11 @@ void InGameState::msgDeathLocations(std::vector<Vector3>& vectorList)
 
 		if (result) ++posIter;
 	}
+}
+
+void InGameState::msgGameOver()
+{
+	changeState(manager, GameOverState::getInstance());
 }
 
 void InGameState::_buildObjects(void)
@@ -224,6 +243,7 @@ void InGameState::_setLights(void)
 	Light* light;
 
 	light = mSceneMgr->createLight("DirectLight");
+
 	light->setType(Light::LT_DIRECTIONAL);
 	light->setDirection(Vector3(1, -2.0f, -1).normalisedCopy());
 	light->setDiffuseColour(ColourValue(0.4f, 0.1f, 0.1f));
@@ -244,14 +264,17 @@ void InGameState::_setLights(void)
 	light->setDiffuseColour(ColourValue(1.f, 1.f, 1.f));
 	light->setVisible(true);
 #endif
-	SceneNode * lightNode = 
-		mpPlayer->getRootNode()->createChildSceneNode("PlayerLight", Vector3(0, 100, 0));
 
-	lightNode->attachObject(light);
+		SceneNode * lightNode =
+			mpPlayer->getRootNode()->createChildSceneNode("PlayerLight", Vector3(0, 100, 0));
+
+		lightNode->attachObject(light);
+	
 }
 
 void InGameState::_drawGroundPlane(void)
 {
+
 	Plane plane(Vector3::UNIT_Y, 0);
 	MeshManager::getSingleton().createPlane(
 		"Ground",
@@ -274,6 +297,7 @@ void InGameState::_drawGroundPlane(void)
 
 void InGameState::_setResources(void)
 {
+
 	mSceneMgr->setSkyBox(true, "3D-Diggers/SkyBox", 10000);
 #if _DEBUG
 	mSceneMgr->setShowDebugShadows(true);

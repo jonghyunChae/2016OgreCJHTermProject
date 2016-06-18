@@ -32,13 +32,15 @@ void CWarriorAttackState::Enter(CWarriorPlayer * pPlayer)
 {
 	pPlayer->setAnimation(CDynamicObject::eATTACK, false);
 	pPlayer->setAutoAnimChange(false);
+	attacked = false;
+	pPlayer->setAttackDelay(true);
 }
 
 void CWarriorAttackState::Execute(CWarriorPlayer * pPlayer, float fFrameTime)
 {
 	const Real timePos = pPlayer->getAnimState()->getTimePosition();
 	
-	if (0.8f < timePos && timePos < 0.9f)
+	if (false == attacked && 0.8f < timePos && timePos < 0.9f)
 	{
 		auto & monArray = pPlayer->getTargetMonsterArray();
 		const Vector3 & pos = pPlayer->getPosition();
@@ -50,14 +52,19 @@ void CWarriorAttackState::Execute(CWarriorPlayer * pPlayer, float fFrameTime)
 			if (false == mon->getStatus().isDeath())
 			{
 				auto targetPos = mon->getPosition();
-				if (targetPos.distance(pos) < attackRange)
+				if (targetPos.distance(pos) < attackRange) {
 					if (mon->damaged(10))
 						locations.push_back(targetPos);
+					attacked = true;
+				}
 			}
 		}
 
 		if (!locations.empty())
-			InGameState::getInstance()->msgDeathLocations(locations);
+		{
+			if (0 == rand() % 3)
+				InGameState::getInstance()->msgDeathLocations(locations);
+		}
 	}
 
 	if (pPlayer->getAnimState()->hasEnded())
@@ -67,6 +74,7 @@ void CWarriorAttackState::Execute(CWarriorPlayer * pPlayer, float fFrameTime)
 void CWarriorAttackState::Exit(CWarriorPlayer * pPlayer)
 {
 	pPlayer->setAutoAnimChange(true);
+	pPlayer->setAttackDelay(false);
 }
 //////////////////////////////////////////////////////////////////////////////////
 CWarriorDeathState & CWarriorDeathState::getInstance()
@@ -80,10 +88,18 @@ void CWarriorDeathState::Enter(CWarriorPlayer * pPlayer)
 	pPlayer->changeState(CDynamicObject::eDEATH);
 	pPlayer->setAnimation(CDynamicObject::eDEATH, false);
 	pPlayer->setAutoAnimChange(false);
+
+	mfChangeSceneTime = 5.f;
 }
 
 void CWarriorDeathState::Execute(CWarriorPlayer * pPlayer, float fFrameTime)
 {
+	mfChangeSceneTime -= fFrameTime;
+
+	if (mfChangeSceneTime < 0.f)
+	{
+		InGameState::getInstance()->msgGameOver();
+	}
 }
 
 void CWarriorDeathState::Exit(CWarriorPlayer * pPlayer)

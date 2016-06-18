@@ -1,0 +1,18 @@
+Overlay/GAME_OVER
+{
+  zorder 101
+	container Panel(GameOverContainer)
+	{
+		container Panel(GameOverLOGO)
+		{
+		  metrics_mode relative
+		  vert_align center
+		  horz_align center
+		  top -0.5
+		  left -0.5
+		  height 1.0
+		  width 1.0
+		  material MAT_GAME_OVER
+		}
+	}
+}

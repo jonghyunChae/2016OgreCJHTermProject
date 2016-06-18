@@ -203,6 +203,7 @@
     <ClCompile Include="DynamicObject.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="GameOverState.cpp" />
     <ClCompile Include="IngameState.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Monster.cpp" />
@@ -253,6 +254,7 @@
     <ClInclude Include="FSM.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="GameOverState.h" />
     <ClInclude Include="GameState.h" />
     <ClInclude Include="IngameState.h" />
     <ClInclude Include="Monster.h" />
@@ -267,6 +269,7 @@
     <ClInclude Include="WarZombieState.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="GameOver.overlay" />
     <None Include="Title.overlay" />
     <None Include="UI.overlay" />
   </ItemGroup>

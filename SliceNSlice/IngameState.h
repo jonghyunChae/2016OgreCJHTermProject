@@ -30,6 +30,7 @@ public:
 	CPlayer * getPlayer() { return mpPlayer; }
 
 	void msgDeathLocations(std::vector<Vector3>& vectorList);
+	void msgGameOver();
 
 private:
 	//InGameState() {}

@@ -9,6 +9,7 @@ CWarZombie::CWarZombie()
 
 CWarZombie::~CWarZombie()
 {
+	if (mpStateMachine) delete mpStateMachine;
 }
 
 void CWarZombie::buildObject(Root * pRoot, SceneManager * pSceneMgr, const char * objName, int index)

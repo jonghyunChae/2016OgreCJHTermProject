@@ -35,6 +35,7 @@ private:
 
 private:
 	const float attackRange = 80.f;
+	bool attacked;
 };
 
 class CWarriorDeathState : public CAIState<CWarriorPlayer>
@@ -49,6 +50,9 @@ private:
 	CWarriorDeathState() {}
 	virtual ~CWarriorDeathState() {}
 	CWarriorDeathState& operator=(const CWarriorDeathState&);
+
+private:
+	float mfChangeSceneTime;
 };
 
 #endif

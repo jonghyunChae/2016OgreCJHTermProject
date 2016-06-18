@@ -4,6 +4,11 @@
 using namespace Ogre;
 
 TitleState TitleState::mTitleState;
+Overlay * textOverlay = nullptr;
+
+TitleState::TitleState()
+{
+}
 
 void TitleState::enter(void)
 {
@@ -12,22 +17,27 @@ void TitleState::enter(void)
 	mTitleOverlay->show();
 
 	auto overlayMgr = OverlayManager::getSingletonPtr();
-	auto textOverlay = overlayMgr->create("TextOverlay");
-	auto panel = static_cast<Ogre::OverlayContainer*>
-		(overlayMgr->createOverlayElement("Panel", "container1"));
-	panel->setDimensions(1, 1);
-	panel->setPosition(0.35f, 0.8f);
-	mStartMsg = overlayMgr->createOverlayElement("TextArea", "TextID");
-	mStartMsg->setMetricsMode(Ogre::GMM_PIXELS);
-	mStartMsg->setPosition(10, 10);
-	mStartMsg->setWidth(100);
-	mStartMsg->setHeight(20);
-	mStartMsg->setParameter("font_name", "Font/NanumBold18");
-	mStartMsg->setParameter("char_height", "40");
-	mStartMsg->setColour(Ogre::ColourValue::White);
-	mStartMsg->setCaption(L"게임시작 SpaceBar");
-	panel->addChild(mStartMsg);
-	textOverlay->add2D(panel);
+	//if (nullptr == textOverlay)
+
+	if (nullptr == textOverlay) 
+	{
+		textOverlay = overlayMgr->create("TextOverlay");
+		auto panel = static_cast<Ogre::OverlayContainer*>
+			(overlayMgr->createOverlayElement("Panel", "container1"));
+		panel->setDimensions(1, 1);
+		panel->setPosition(0.35f, 0.8f);
+		mStartMsg = overlayMgr->createOverlayElement("TextArea", "TextID");
+		mStartMsg->setMetricsMode(Ogre::GMM_PIXELS);
+		mStartMsg->setPosition(10, 10);
+		mStartMsg->setWidth(100);
+		mStartMsg->setHeight(20);
+		mStartMsg->setParameter("font_name", "Font/NanumBold18");
+		mStartMsg->setParameter("char_height", "40");
+		mStartMsg->setColour(Ogre::ColourValue::White);
+		mStartMsg->setCaption(L"게임시작 SpaceBar");
+		panel->addChild(mStartMsg);
+		textOverlay->add2D(panel);
+	}
 	textOverlay->show();
 	//mStartMsg = OverlayManager::getSingleton().getOverlayElement("StartMsg");
 	//mStartMsg->show();
@@ -35,6 +45,7 @@ void TitleState::enter(void)
 
 void TitleState::exit(void)
 {
+
 	mTitleOverlay->hide();
 	OverlayManager::getSingletonPtr()->getByName("TextOverlay")->hide();
 }

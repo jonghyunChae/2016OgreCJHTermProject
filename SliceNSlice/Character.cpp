@@ -53,15 +53,17 @@ bool CCharacter::damaged(int dmg)
 
 void CCharacter::insertAnimationState(SceneNode * bodyRoot, OBJ_STATE state, string & meshName, string & animName)
 {
-	Entity * entity = mSceneMgr->createEntity(animName, meshName);
-	entity->setCastShadows(true);
+	//if (nullptr == mSceneMgr->getEntity(animName))
+	{
+		Entity * entity = mSceneMgr->createEntity(animName, meshName);
+		entity->setCastShadows(true);
 
-	SceneNode * node = bodyRoot->createChildSceneNode(animName, Vector3::ZERO);
-	node->attachObject(entity);
-	node->rotate(Vector3(1, 0, 0), Degree(90));
-	node->setVisible(false);
-	mCurrentNode = node;
-
+		SceneNode * node = bodyRoot->createChildSceneNode(animName, Vector3::ZERO);
+		node->attachObject(entity);
+		node->rotate(Vector3(1, 0, 0), Degree(90));
+		node->setVisible(false);
+		mCurrentNode = node;
+	}
 	mAnimList[state] = animName; 
 }
 
