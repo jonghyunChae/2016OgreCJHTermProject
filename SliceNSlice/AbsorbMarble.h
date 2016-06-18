@@ -12,11 +12,8 @@ public:
 
 public:
 	bool allocMarble(Vector3 & pos);
-	void setActive(bool val) { active = val; }
-	bool getActive() { return active; }
 
 private:
-	bool active;
 
 };
 

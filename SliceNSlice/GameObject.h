@@ -27,11 +27,16 @@ public:
 	virtual SceneNode * const getRotateNode() { return mpNode; }
 	void setNode(SceneNode * pNode) { mpNode = pNode; }
 
+	virtual void setActive(bool val) { active = val; if (mpNode) mpNode->setVisible(val); }
+	bool getActive() { return active; }
+
 protected:
 	SceneNode * mpNode;
 	Entity    * mpEntity;
 
 	CGameObject * mpChildObject;
+
+	bool active;
 
 private:
 	Vector3  mBasicLookVector;

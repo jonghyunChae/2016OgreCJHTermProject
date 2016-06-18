@@ -45,8 +45,8 @@ void CWarriorPlayer::update(float frameTime)
 bool CWarriorPlayer::damaged(int dmg)
 {
 	bool isDeath = mStatus.damaged(dmg);
-	if (isDeath)
-		mpStateMachine->ChangeState(&CWarriorDeathState::getInstance());
+	//if (isDeath)
+	//	mpStateMachine->ChangeState(&CWarriorDeathState::getInstance());
 
 	return isDeath;
 }

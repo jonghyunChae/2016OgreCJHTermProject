@@ -12,6 +12,8 @@ CWarZombieIdleState & CWarZombieIdleState::getInstance()
 
 void CWarZombieIdleState::Enter(CWarZombie * pMonster)
 {
+	pMonster->setAutoAnimChange(true);
+
 	if (nullptr == pPlayer)
 		pPlayer = static_cast<CWarriorPlayer*>(InGameState::getInstance()->getPlayer());
 
@@ -92,6 +94,18 @@ void CWarZombieAttackState::Execute(CWarZombie * pMonster, float fFrameTime)
 	if (targetDisSq > attackRangeSq)
 	{
 		pMonster->getStateMachine()->ChangeState(&CWarZombieIdleState::getInstance());
+	}
+	else
+	{
+		auto timePos = pMonster->getAnimState()->getTimePosition();
+		if (0.8f < timePos && timePos < 0.85f)
+		{
+			auto player = InGameState::getInstance()->getPlayer();
+			auto pos = pMonster->getPosition();
+			auto targetPos = player->getPosition();
+			if (targetPos.squaredDistance(pos) < attackRangeSq)
+				player->damaged(3);
+		}
 	}
 }
 

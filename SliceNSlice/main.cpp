@@ -21,6 +21,8 @@ extern "C" {
   int main(int argc, char *argv[])
 #endif
   {
+	  srand((unsigned int)time(NULL));
+
 	  if (AllocConsole())
 	  {
 		  freopen("CONIN$", "rb", stdin);

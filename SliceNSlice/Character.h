@@ -16,7 +16,7 @@ public:
 	virtual void update(float fFrameTime);
 
 	virtual bool damaged(int dmg);
-	
+	virtual void setActive(bool val) { active = val; if (mCurrentNode) mCurrentNode->setVisible(val); }
 public:
 	void insertAnimationState(SceneNode * bodyRoot, OBJ_STATE state, string & meshName, string & animName); 
 	void setAnimation(string name, bool loop = true);

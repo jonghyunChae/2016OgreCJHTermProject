@@ -17,7 +17,7 @@ public:
 	virtual void update(float fFrameTime);
 
 	virtual bool damaged(int dmg);
-
+	virtual void revive();
 public:
 	CStateMachine<CWarZombie> * getStateMachine() { return mpStateMachine; }
 

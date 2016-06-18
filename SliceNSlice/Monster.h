@@ -17,6 +17,7 @@ public:
 public:
 	virtual bool damaged(int dmg);
 	virtual void revive();
+	bool allocMarble(Vector3 & pos);
 
 	void setDeathTime(float time) { mfDeathTime = mfDeathTime; }
 

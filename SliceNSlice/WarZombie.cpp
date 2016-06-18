@@ -39,8 +39,8 @@ void CWarZombie::buildObject(Root * pRoot, SceneManager * pSceneMgr, const char 
 
 	Entity* entity = getAnimEntity(OBJ_STATE::eIDLE);
 	mpEntity = entity;
-	entity->setVisible(true);
-	entity->setCastShadows(true);
+	mpEntity->setVisible(true);
+	mpEntity->setCastShadows(true);
 
 	mpStateMachine = new CStateMachine<CWarZombie>(this);
 	mpStateMachine->SetCurrentState(&CWarZombieIdleState::getInstance());
@@ -60,4 +60,11 @@ bool CWarZombie::damaged(int dmg)
 		mpStateMachine->ChangeState(&CWarZombieDeathState::getInstance());
 
 	return isDeath;
+}
+
+void CWarZombie::revive()
+{
+	setActive(true);
+	mStatus.resetHP();
+	mpStateMachine->ChangeState(&CWarZombieIdleState::getInstance());
 }

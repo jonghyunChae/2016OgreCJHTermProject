@@ -24,6 +24,8 @@ void InGameState::enter()
 	_drawGroundPlane();
 	_setResources();
 	_buildUI();
+
+	mfRegenTime = 0.0f;
 }
 
 void InGameState::exit()
@@ -50,10 +52,24 @@ void InGameState::resume()
 bool InGameState::frameStarted(GameManager * game, const Ogre::FrameEvent & evt)
 {
 	const float frameTime = evt.timeSinceLastFrame;
+	mfRegenTime -= frameTime;
+	bool regen = mfRegenTime < 0.0f;
+	if (regen) mfRegenTime = REGEN_TERM;
+
 	mpPlayer->update(frameTime);
 
+	int regenNum = 0;
 	for (auto & monster : mpMonsters)
-		monster->update(frameTime);
+	{
+		if (monster->getActive())
+			monster->update(frameTime);
+		else if (regen && regenNum < 10)
+		{
+			monster->revive();
+			monster->getNode()->setPosition(Vector3(rand() % 800 - 400, 0, rand() % 800 - 400));
+			regenNum++;
+		}
+	}
 
 	for (auto & absorb : mpAbsorbs)
 		absorb->update(frameTime);
@@ -151,14 +167,15 @@ void InGameState::_buildObjects(void)
 	mpPlayer->setAnimation("Idle");
 
 	char name[56];
-	for (int i = 0; i < 10; ++i)
+	for (int i = 0; i < 100; ++i)
 	{
 		sprintf(name, "Zombie%d", i);
 
 		CMonster * pMonster = new CWarZombie();
 		pMonster->buildObject(mRoot, mSceneMgr, name, i);
 		pMonster->setAnimation(CDynamicObject::eIDLE);
-		pMonster->getNode()->setPosition(Vector3(rand() % 400 - 200, 0, rand() % 400 - 200));
+		pMonster->setActive(false);
+		//pMonster->getNode()->setPosition(Vector3(rand() % 800 - 400, 0, rand() % 800 - 400));
 		mpMonsters.push_back(pMonster);
 	}
 

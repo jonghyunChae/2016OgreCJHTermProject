@@ -47,8 +47,9 @@ void CMonster::update(float fFrameTime)
 	if (mStatus.isDeath())
 	{
 		mfDeathTime += fFrameTime;
+
 		if (mfDeathTime >= 4.0f)
-			mpEntity->setVisible(false);
+			setActive(false);
 	}
 
 	CCharacter::update(fFrameTime);
@@ -63,6 +64,15 @@ bool CMonster::damaged(int dmg)
 
 void CMonster::revive()
 {
-	mStatus.healHP(1000);
+	mStatus.resetHP();
+}
 
+bool CMonster::allocMarble(Vector3 & pos)
+{
+	if (active) return false;
+
+	active = true;
+	mpNode->setVisible(active);
+	mpNode->setPosition(pos);
+	return true;
 }

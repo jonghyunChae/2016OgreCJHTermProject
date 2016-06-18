@@ -4,6 +4,7 @@
 
 CGameObject::CGameObject()
 {
+	active		  = true;
 	mpChildObject = nullptr;
 	mpNode        = nullptr;
 	mBasicLookVector = Vector3::UNIT_Z;

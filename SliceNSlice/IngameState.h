@@ -73,6 +73,9 @@ private:
 	Ogre::AnimationState* mAnimationState;
 
 	Ogre::Overlay* mHPBarOverlay;
+
+	float mfRegenTime;
+	const float REGEN_TERM = 15.0f;
 };
 
 
