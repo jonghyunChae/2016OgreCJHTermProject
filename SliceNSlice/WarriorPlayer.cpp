@@ -4,6 +4,7 @@
 CWarriorPlayer::CWarriorPlayer()
 {
 	mpStateMachine = nullptr;
+	mAttackDelay = false;
 }
 
 CWarriorPlayer::~CWarriorPlayer()

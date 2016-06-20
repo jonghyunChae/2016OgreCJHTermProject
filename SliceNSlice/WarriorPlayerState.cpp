@@ -34,30 +34,39 @@ void CWarriorAttackState::Enter(CWarriorPlayer * pPlayer)
 	pPlayer->setAutoAnimChange(false);
 	attacked = false;
 	pPlayer->setAttackDelay(true);
+	PlaySound("hit_temp.wav", NULL, SND_ASYNC);
 }
 
 void CWarriorAttackState::Execute(CWarriorPlayer * pPlayer, float fFrameTime)
 {
 	const Real timePos = pPlayer->getAnimState()->getTimePosition();
 	
-	if (false == attacked && 0.8f < timePos && timePos < 0.9f)
+	if ((false == attacked) && (0.8f < timePos) && (timePos < 0.9f))
 	{
 		auto & monArray = pPlayer->getTargetMonsterArray();
 		const Vector3 & pos = pPlayer->getPosition();
 		
 		std::vector<Vector3> locations;
+		bool attackSucc = false;
 
 		for (auto & mon : monArray)
 		{
-			if (false == mon->getStatus().isDeath())
+			//if (false == mon->getStatus().isDeath())
 			{
 				auto targetPos = mon->getPosition();
 				if (targetPos.distance(pos) < attackRange) {
+					attackSucc = true;
 					if (mon->damaged(10))
 						locations.push_back(targetPos);
-					attacked = true;
+
 				}
 			}
+		}
+
+		if (attackSucc)
+		{
+			attacked = true;
+			PlaySound("hit_enemy.wav", NULL, SND_ASYNC);
 		}
 
 		if (!locations.empty())

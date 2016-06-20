@@ -10,7 +10,7 @@ CCharacter::CCharacter() : CDynamicObject()
 	mAnimationState = nullptr;
 	mCurrentNode = nullptr;
 	mBeforeState = eIDLE;
-
+	mAttackDelay = false;
 
 	mOffsetVector = Vector3::ZERO;
 }

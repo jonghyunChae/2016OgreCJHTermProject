@@ -114,9 +114,13 @@ bool InGameState::mousePressed(GameManager * game, const OIS::MouseEvent & e, OI
 
 		for (auto & monster : mpMonsters)
 		{
-			if (false == monster->getStatus().isDeath())
-				monArray.push_back(monster);
+			if (monster->getStatus().isDeath()) continue;
+			if (false == monster->getActive()) continue;
+
+			monArray.push_back(monster);
 		}
+
+		cout << "Change!";
 		player->getStateMachine()->ChangeState(&CWarriorAttackState::getInstance());
 	}
 
@@ -156,6 +160,7 @@ bool InGameState::keyReleased(GameManager * game, const OIS::KeyEvent & e)
 	case OIS::KC_DOWN:  mpPlayer->move(-Vector3::UNIT_Z);  break;
 
 	case OIS::KC_D: mpPlayer->damaged(100); break;
+	//case OIS::KC_P: PlaySound("hit_enemy.wav", NULL, SND_ASYNC); break;
 	}
 	return true;
 }

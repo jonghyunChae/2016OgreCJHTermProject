@@ -3,6 +3,10 @@
 #ifndef __COMMON_H
 #define __COMMON_H
 
+#include <Windows.h>
+#include <mmsystem.h>
+#pragma comment(lib, "winmm.lib")
+
 #define CLIENT_DESCRIPTION "Slice & Slice"
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
