@@ -171,5 +171,8 @@
     <None Include="GameOver.overlay">
       <Filter>리소스 파일</Filter>
     </None>
+    <None Include="Information.overlay">
+      <Filter>리소스 파일</Filter>
+    </None>
   </ItemGroup>
 </Project>

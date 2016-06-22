@@ -39,9 +39,9 @@ void AbsorbMarble::update(float fFrameTime)
 	auto playerPos = player->getPosition();
 	auto myPos = getPosition();
 
-	if (myPos.squaredDistance(playerPos) <= 900)
+	if (myPos.squaredDistance(playerPos) <= 1000)
 	{
-		player->getStatus().healHP(3);
+		player->getStatus().healHP(20);
 		active = false;
 		mpNode->setVisible(active);
 	}

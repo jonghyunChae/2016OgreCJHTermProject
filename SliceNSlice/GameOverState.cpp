@@ -5,7 +5,7 @@ using namespace Ogre;
 
 GameOverState GameOverState::mState;
 
-void GameOverState::enter(void)
+void GameOverState::enter(GameManager* game)
 {
 	mContinue = true;
 	mScreenOverlay = OverlayManager::getSingleton().getByName("Overlay/GAME_OVER");
@@ -15,17 +15,17 @@ void GameOverState::enter(void)
 	//mStartMsg->show();
 }
 
-void GameOverState::exit(void)
+void GameOverState::exit(GameManager* game)
 {
 	mScreenOverlay->hide();
 }
 
-void GameOverState::pause(void)
+void GameOverState::pause(GameManager* game)
 {
 	std::cout << "TitleState pause\n";
 }
 
-void GameOverState::resume(void)
+void GameOverState::resume(GameManager* game)
 {
 	std::cout << "TitleState resume\n";
 }

@@ -11,8 +11,11 @@ InGameState  InGameState::mInGameState;
 
 GameManager * manager = nullptr;
 
-void InGameState::enter()
+void InGameState::enter(GameManager* game)
 {
+	//game->playMusic("data/sound/stage.mp3");
+	mKillNum = 0;
+
 	mContinue = true;
 	mRoot = Root::getSingletonPtr();
 	mRoot->getAutoCreatedWindow()->resetStatistics();
@@ -31,7 +34,7 @@ void InGameState::enter()
 	mfRegenTime = 0.0f;
 }
 
-void InGameState::exit()
+void InGameState::exit(GameManager* game)
 {
 	mSceneMgr->clearScene();
 	//mInformationOverlay->hide();
@@ -49,11 +52,11 @@ void InGameState::exit()
 	OverlayManager::getSingleton().getByName("Overlay/GameUi/HpBar")->hide();
 }
 
-void InGameState::pause()
+void InGameState::pause(GameManager* game)
 {
 }
 
-void InGameState::resume()
+void InGameState::resume(GameManager* game)
 {
 }
 
@@ -167,16 +170,27 @@ bool InGameState::keyReleased(GameManager * game, const OIS::KeyEvent & e)
 
 void InGameState::msgDeathLocations(std::vector<Vector3>& vectorList)
 {
-	auto posIter = vectorList.begin();
+	//auto posIter = vectorList.begin();
 	auto absotbIter = mpAbsorbs.begin();
 
-	while(posIter != vectorList.end())
+	for(auto & pos : vectorList)
+	//while(posIter != vectorList.end())
 	{
-		bool result = (*absotbIter)->allocMarble(*posIter);
-		++absotbIter;
-
-		if (result) ++posIter;
+		if (0 == rand() % 4)
+		{
+			bool allocSuccess = false;
+			while (false == allocSuccess) {
+				allocSuccess = (*absotbIter)->allocMarble(pos);
+				++absotbIter;
+			}
+		}
+		//++posIter;
+		mKillNum++;
 	}
+
+	static wchar_t caption[56];
+	swprintf(caption, L"Kill : %2d", mKillNum);
+	mTextUIOverlay->setCaption(caption);
 }
 
 void InGameState::msgGameOver()
@@ -298,6 +312,38 @@ void InGameState::_drawGroundPlane(void)
 	Ogre::MaterialManager::getSingleton().getByName("Terrain")->setReceiveShadows(true);
 //	groundEntity->getMateri setReceiveShadows(true);
 
+	Plane zPlane(Vector3::UNIT_Z, 0);
+	MeshManager::getSingleton().createPlane(
+		"BillBoardTree",
+		ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
+		zPlane,
+		100, 100,
+		1, 1,
+		true, 1, 1, 1
+		);
+
+	char name[56];
+
+	for (int i = 0; i < 100; ++i) {
+		sprintf(name, "BillBoardPlane%3d", i);
+
+		groundEntity = mSceneMgr->createEntity(name, "BillBoardTree");
+		groundEntity->setMaterialName("BillBoard_Tree");
+		groundEntity->setCastShadows(false);
+
+		auto node = mSceneMgr->getRootSceneNode()->createChildSceneNode(name);
+		node->attachObject(groundEntity);
+		if (0 == (i % 2))
+		{
+			node->yaw(Degree(180));
+			node->translate(Vector3(i * 50 - 2500, 50, 600));
+		}
+		else
+		{
+			node->translate(Vector3(i * 50 - 2500, 50, -600));
+		}
+	}
+	//Ogre::MaterialManager::getSingleton().getByName("BillBoardTree")->setReceiveShadows(true);
 }
 
 void InGameState::_setResources(void)
@@ -307,6 +353,27 @@ void InGameState::_setResources(void)
 #if _DEBUG
 	mSceneMgr->setShowDebugShadows(true);
 #endif
+
+	mOverlayMgr = OverlayManager::getSingletonPtr();
+	mTextOverlay = mOverlayMgr->create("TextOverlayInGame");
+
+	mPanel = static_cast<Ogre::OverlayContainer*>
+		(mOverlayMgr->createOverlayElement("Panel", "containerInGame"));
+	mPanel->setDimensions(1, 1);
+	mPanel->setPosition(0.5f, 0.04f);
+
+	mTextUIOverlay = mOverlayMgr->createOverlayElement("TextArea", "KillNumText");
+	mTextUIOverlay->setMetricsMode(Ogre::GMM_PIXELS);
+	mTextUIOverlay->setPosition(0, 0);
+	mTextUIOverlay->setWidth(100);
+	mTextUIOverlay->setHeight(20);
+	mTextUIOverlay->setParameter("font_name", "Font/NanumBold18");
+	mTextUIOverlay->setParameter("char_height", "40");
+	mTextUIOverlay->setColour(Ogre::ColourValue::White);
+	mTextUIOverlay->setCaption(L"Kill : 0");
+	mPanel->addChild(mTextUIOverlay);
+	mTextOverlay->add2D(mPanel);
+	mTextOverlay->show();
 }
 
 void InGameState::_buildUI(void)

@@ -106,7 +106,7 @@ void CWarZombieAttackState::Execute(CWarZombie * pMonster, float fFrameTime)
 			auto targetPos = player->getPosition();
 			if (targetPos.squaredDistance(pos) < attackRangeSq)
 			{
-				player->damaged(10);
+				player->damaged(8);
 				pMonster->setAttackDelay(true);
 			}
 		}

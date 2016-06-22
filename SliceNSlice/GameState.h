@@ -1,15 +1,14 @@
 #pragma once
 
 #include "GameManager.h"
-
 class GameState
 {
 public:
-    virtual void enter(void) = 0;
-    virtual void exit(void) = 0;
+    virtual void enter(GameManager* game) = 0;
+    virtual void exit(GameManager* game) = 0;
 
-    virtual void pause(void) = 0;
-    virtual void resume(void) = 0;
+    virtual void pause(GameManager* game) = 0;
+    virtual void resume(GameManager* game) = 0;
 
     virtual bool frameStarted(GameManager* game, const Ogre::FrameEvent& evt) = 0;
     virtual bool frameEnded(GameManager* game, const Ogre::FrameEvent& evt) = 0;

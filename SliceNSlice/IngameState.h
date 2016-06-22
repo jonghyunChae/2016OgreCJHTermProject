@@ -10,10 +10,10 @@
 class InGameState : public GameState
 {
 public:
-	void enter();
-	void exit();
-	void pause();
-	void resume();
+	void enter(GameManager* game);
+	void exit(GameManager* game);
+	void pause(GameManager* game);
+	void resume(GameManager* game);
 
 	bool frameStarted(GameManager* game, const Ogre::FrameEvent& evt);
 	bool frameEnded(GameManager* game, const Ogre::FrameEvent& evt);
@@ -75,8 +75,17 @@ private:
 
 	Ogre::Overlay* mHPBarOverlay;
 
+	Ogre::OverlaySystem* mOverlaySystem;
+	Ogre::OverlayManager*    mOverlayMgr;
+	Ogre::Overlay*           mTextOverlay;
+	Ogre::Overlay*           mLogoOverlay;
+	Ogre::Overlay*           mDebugOverlay;
+	Ogre::OverlayElement*	 mTextUIOverlay;
+	Ogre::OverlayContainer*  mPanel;
+
 	float mfRegenTime;
 	const float REGEN_TERM = 15.0f;
+	int mKillNum;
 };
 
 

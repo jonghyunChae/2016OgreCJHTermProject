@@ -38,7 +38,7 @@ private:
 
 private:
 	const float attackRangeSq = 4000.f;
-	const float chaseRangeSq = 100000.f;
+	const float chaseRangeSq = 600000.f;
 };
 
 class CWarZombieAttackState : public CAIState<CWarZombie>

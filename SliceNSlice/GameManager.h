@@ -37,6 +37,9 @@ public:
   bool keyPressed( const OIS::KeyEvent &e );
   bool keyReleased( const OIS::KeyEvent &e );		
 
+  void playMusic(const char * name);
+  void stopMusic();
+
 protected:
   Ogre::Root* mRoot;
   Ogre::RenderWindow* mWindow;
@@ -54,6 +57,10 @@ private:
   Ogre::SceneManager* mSceneMgr;
   Ogre::Camera* mCamera;
   Ogre::Viewport* mViewport;
+
+  MCI_OPEN_PARMS mciOpen;
+  MCI_PLAY_PARMS mciPlay;
+  int dwID;
 };
 
 

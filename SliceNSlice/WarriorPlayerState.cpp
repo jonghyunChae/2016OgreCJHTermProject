@@ -34,7 +34,7 @@ void CWarriorAttackState::Enter(CWarriorPlayer * pPlayer)
 	pPlayer->setAutoAnimChange(false);
 	attacked = false;
 	pPlayer->setAttackDelay(true);
-	PlaySound("hit_temp.wav", NULL, SND_ASYNC);
+	PlaySound("data/sound/hit_temp.wav", NULL, SND_ASYNC /*| SND_NOSTOP | SND_NOWAIT*/);
 }
 
 void CWarriorAttackState::Execute(CWarriorPlayer * pPlayer, float fFrameTime)
@@ -66,13 +66,12 @@ void CWarriorAttackState::Execute(CWarriorPlayer * pPlayer, float fFrameTime)
 		if (attackSucc)
 		{
 			attacked = true;
-			PlaySound("hit_enemy.wav", NULL, SND_ASYNC);
+			PlaySound("data/sound/hit_enemy.wav", NULL, SND_ASYNC /*| SND_NOSTOP | SND_NOWAIT*/);
 		}
 
 		if (!locations.empty())
 		{
-			if (0 == rand() % 3)
-				InGameState::getInstance()->msgDeathLocations(locations);
+			InGameState::getInstance()->msgDeathLocations(locations);
 		}
 	}
 

@@ -10,8 +10,10 @@ TitleState::TitleState()
 {
 }
 
-void TitleState::enter(void)
+void TitleState::enter(GameManager* game)
 {
+	PlaySound("data/sound/title.mp3", NULL, SND_ASYNC);
+
 	mContinue = true;
 	mTitleOverlay = OverlayManager::getSingleton().getByName("Overlay/Title");
 	mTitleOverlay->show();
@@ -43,19 +45,19 @@ void TitleState::enter(void)
 	//mStartMsg->show();
 }
 
-void TitleState::exit(void)
+void TitleState::exit(GameManager* game)
 {
 
 	mTitleOverlay->hide();
 	OverlayManager::getSingletonPtr()->getByName("TextOverlay")->hide();
 }
 
-void TitleState::pause(void)
+void TitleState::pause(GameManager* game)
 {
 	std::cout << "TitleState pause\n";
 }
 
-void TitleState::resume(void)
+void TitleState::resume(GameManager* game)
 {
 	std::cout << "TitleState resume\n";
 }

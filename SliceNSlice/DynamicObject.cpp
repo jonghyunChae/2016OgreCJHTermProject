@@ -60,6 +60,18 @@ void CDynamicObject::update(float frameTime)
 			}
 		}
 		rotNode->translate(mDir * mMaxSpeed * frameTime);
+		
+		auto after = rotNode->getPosition();
+		if (after.z >= 400.f)
+		{
+			after.z = 400.f;
+			rotNode->setPosition(after);
+		}
+		else if (after.z <= -400.f)
+		{
+			after.z = -400.f;
+			rotNode->setPosition(after);
+		}
 
 		Quaternion rot = getBasicLookVector().getRotationTo(mDir);
 		rotNode->setOrientation(rot);

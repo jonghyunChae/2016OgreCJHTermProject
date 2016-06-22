@@ -6,10 +6,10 @@ class GameOverState : public GameState
 {
 public:
 	// Fill Here --------------------------------------------------------------------------------------------
-	void enter();
-	void exit();
-	void pause();
-	void resume();
+	void enter(GameManager* game);
+	void exit(GameManager* game);
+	void pause(GameManager* game);
+	void resume(GameManager* game);
 	bool frameStarted(GameManager* game, const Ogre::FrameEvent& evt);
 	bool frameEnded(GameManager* game, const Ogre::FrameEvent& evt);
 	bool mouseMoved(GameManager* game, const OIS::MouseEvent &e)

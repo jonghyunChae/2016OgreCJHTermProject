@@ -270,6 +270,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="GameOver.overlay" />
+    <None Include="Information.overlay" />
     <None Include="Title.overlay" />
     <None Include="UI.overlay" />
   </ItemGroup>

@@ -8,12 +8,13 @@ using namespace Ogre;
 GameManager::GameManager()
 {
 	mRoot = 0;
+	dwID = 0;
 }
 
 GameManager::~GameManager()
 {
 	while (!states.empty()) {
-		states.back()->exit();
+		states.back()->exit(this);
 		states.pop_back();
 	}
 
@@ -84,34 +85,34 @@ void GameManager::go(void)
 void GameManager::changeState(GameState* state)
 {
   if ( !states.empty() ) {
-    states.back()->exit();
+    states.back()->exit(this);
     states.pop_back();
   }
   states.push_back(state);
-  states.back()->enter();
+  states.back()->enter(this);
 }
 
 void GameManager::pushState(GameState* state)
 {
   // pause current state
   if ( !states.empty() ) {
-    states.back()->pause();
+    states.back()->pause(this);
   }
   // store and init the new state
   states.push_back(state);
-  states.back()->enter();
+  states.back()->enter(this);
 }
 
 void GameManager::popState()
 {
   // cleanup the current state
   if ( !states.empty() ) {
-    states.back()->exit();
+    states.back()->exit(this);
     states.pop_back();
   }
   // resume previous state
   if ( !states.empty() ) {
-    states.back()->resume();
+    states.back()->resume(this);
   }
 }
 
@@ -137,4 +138,22 @@ bool GameManager::mousePressed(const OIS::MouseEvent &e, OIS::MouseButtonID id )
 bool GameManager::mouseReleased(const OIS::MouseEvent &e, OIS::MouseButtonID id ) { return states.back()->mouseReleased(this, e, id); }
 
 bool GameManager::keyPressed(const OIS::KeyEvent &e) { return states.back()->keyPressed(this, e); }
-bool GameManager::keyReleased(const OIS::KeyEvent &e) { return states.back()->keyReleased(this, e); }	
+bool GameManager::keyReleased(const OIS::KeyEvent &e) { return states.back()->keyReleased(this, e); }
+
+void GameManager::playMusic(const char * musicFileName)
+{
+	stopMusic();
+
+	mciOpen.lpstrElementName = _T(musicFileName);  //연주할 파일 이름
+
+	mciSendCommand(NULL, MCI_OPEN, MCI_OPEN_ELEMENT | MCI_OPEN_TYPE, reinterpret_cast<DWORD_PTR>/*(DWORD)(LPVOID)*/(&mciOpen)); //MCI_OPEN 명령을 준다.
+
+	dwID = mciOpen.wDeviceID;    //열린 디바이스 아이디를 받는다.
+
+	mciSendCommand(dwID, MCI_PLAY, MCI_NOTIFY, (DWORD)&mciPlay);//연주시작
+}
+
+void GameManager::stopMusic()
+{
+	mciSendCommand(dwID, MCI_CLOSE, 0, NULL);//연주 종료
+}
