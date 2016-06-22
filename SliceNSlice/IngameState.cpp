@@ -114,6 +114,7 @@ bool InGameState::mousePressed(GameManager * game, const OIS::MouseEvent & e, OI
 	if (e.state.buttonDown(OIS::MB_Right))
 	{
 		CWarriorPlayer* player = static_cast<CWarriorPlayer*>(mpPlayer);
+		if (player->getStatus().isDeath()) return true;
 		if (player->isAttackDelay()) return true;
 
 		auto & monArray = player->getTargetMonsterArray();
