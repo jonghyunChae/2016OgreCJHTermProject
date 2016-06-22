@@ -33,7 +33,7 @@ public:
 	void msgGameOver();
 
 private:
-	//InGameState() {}
+	InGameState() { mTextOverlay = nullptr; }
 	~InGameState() {}
 
 	static InGameState mInGameState;

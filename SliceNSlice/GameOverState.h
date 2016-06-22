@@ -32,8 +32,19 @@ public:
 
 private:
 	static GameOverState mState;
+	GameOverState() { mTextOverlay = nullptr; }
+
+	void _setResultCaption(GameManager * game);
 
 	bool mContinue;
 
 	Ogre::Overlay* mScreenOverlay;
+
+	Ogre::OverlaySystem* mOverlaySystem;
+	Ogre::OverlayManager*    mOverlayMgr;
+	Ogre::Overlay*           mTextOverlay;
+	Ogre::Overlay*           mLogoOverlay;
+	Ogre::Overlay*           mDebugOverlay;
+	Ogre::OverlayElement*	 mTextUIOverlay;
+	Ogre::OverlayContainer*  mPanel;
 };

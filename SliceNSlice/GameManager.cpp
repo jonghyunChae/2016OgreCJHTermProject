@@ -9,6 +9,7 @@ GameManager::GameManager()
 {
 	mRoot = 0;
 	dwID = 0;
+	mScore = 0;
 }
 
 GameManager::~GameManager()

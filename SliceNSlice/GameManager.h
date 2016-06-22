@@ -40,6 +40,9 @@ public:
   void playMusic(const char * name);
   void stopMusic();
 
+  void setScore(int ret) { mScore = ret; }
+  int getScore() { return mScore; }
+
 protected:
   Ogre::Root* mRoot;
   Ogre::RenderWindow* mWindow;
@@ -61,6 +64,8 @@ private:
   MCI_OPEN_PARMS mciOpen;
   MCI_PLAY_PARMS mciPlay;
   int dwID;
+
+  int mScore;
 };
 
 

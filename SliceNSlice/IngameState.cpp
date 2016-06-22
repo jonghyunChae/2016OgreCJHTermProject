@@ -50,6 +50,10 @@ void InGameState::exit(GameManager* game)
 
 	OverlayManager::getSingleton().getByName("Overlay/GameUi/Hp")->hide();
 	OverlayManager::getSingleton().getByName("Overlay/GameUi/HpBar")->hide();
+	
+	game->setScore(mKillNum);
+	mKillNum = 0;
+	mTextOverlay->hide();
 }
 
 void InGameState::pause(GameManager* game)
@@ -123,7 +127,6 @@ bool InGameState::mousePressed(GameManager * game, const OIS::MouseEvent & e, OI
 			monArray.push_back(monster);
 		}
 
-		cout << "Change!";
 		player->getStateMachine()->ChangeState(&CWarriorAttackState::getInstance());
 	}
 
@@ -343,36 +346,51 @@ void InGameState::_drawGroundPlane(void)
 			node->translate(Vector3(i * 50 - 2500, 50, -600));
 		}
 	}
+
+	for (int i = 0; i < 50; ++i) {
+		sprintf(name, "Rocks%3d", i);
+
+		groundEntity = mSceneMgr->createEntity(name, "Rock.mesh");
+		auto node = mSceneMgr->getRootSceneNode()->createChildSceneNode(name);
+		node->attachObject(groundEntity);
+		node->translate(Vector3(rand() % 1200 - 600, 0, rand () % 1200 - 600));
+		node->yaw(Degree(rand() % 360));
+	}
 	//Ogre::MaterialManager::getSingleton().getByName("BillBoardTree")->setReceiveShadows(true);
 }
 
 void InGameState::_setResources(void)
 {
-
 	mSceneMgr->setSkyBox(true, "3D-Diggers/SkyBox", 10000);
 #if _DEBUG
 	mSceneMgr->setShowDebugShadows(true);
 #endif
 
 	mOverlayMgr = OverlayManager::getSingletonPtr();
-	mTextOverlay = mOverlayMgr->create("TextOverlayInGame");
+	if (nullptr == mTextOverlay)
+	{
+		mTextOverlay = mOverlayMgr->create("TextOverlayInGame");
+		mPanel = static_cast<Ogre::OverlayContainer*> (mOverlayMgr->createOverlayElement("Panel", "containerInGame"));
+		mTextUIOverlay = mOverlayMgr->createOverlayElement("TextArea", "KillNumText");
 
-	mPanel = static_cast<Ogre::OverlayContainer*>
-		(mOverlayMgr->createOverlayElement("Panel", "containerInGame"));
-	mPanel->setDimensions(1, 1);
-	mPanel->setPosition(0.5f, 0.04f);
+		mPanel->setDimensions(1, 1);
+		mPanel->setPosition(0.45f, 0.04f);
 
-	mTextUIOverlay = mOverlayMgr->createOverlayElement("TextArea", "KillNumText");
-	mTextUIOverlay->setMetricsMode(Ogre::GMM_PIXELS);
-	mTextUIOverlay->setPosition(0, 0);
-	mTextUIOverlay->setWidth(100);
-	mTextUIOverlay->setHeight(20);
-	mTextUIOverlay->setParameter("font_name", "Font/NanumBold18");
-	mTextUIOverlay->setParameter("char_height", "40");
-	mTextUIOverlay->setColour(Ogre::ColourValue::White);
+		mTextUIOverlay->setMetricsMode(Ogre::GMM_PIXELS);
+		mTextUIOverlay->setPosition(0, 0);
+		mTextUIOverlay->setWidth(100);
+		mTextUIOverlay->setHeight(20);
+		mTextUIOverlay->setParameter("font_name", "Font/NanumBold18");
+		mTextUIOverlay->setParameter("char_height", "40");
+		mTextUIOverlay->setColour(Ogre::ColourValue::White);
+		mPanel->addChild(mTextUIOverlay);
+		mTextOverlay->add2D(mPanel);
+	}
+	else
+	{
+		//mTextOverlay = mOverlayMgr->getByName("TextOverlayInGame");
+	}
 	mTextUIOverlay->setCaption(L"Kill : 0");
-	mPanel->addChild(mTextUIOverlay);
-	mTextOverlay->add2D(mPanel);
 	mTextOverlay->show();
 }
 
